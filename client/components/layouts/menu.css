@@ -1,0 +1,24 @@
+.navbar{
+	border: none;
+}
+.navbar-brand {
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 80px;
+}
+.navbar-brand img{
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  height: 35px;
+  width: 35px;
+}
+.navbar-nav li a{
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  font-size: 18px;
+}

@@ -14,7 +14,14 @@ module.exports = {
         include: path.join(__dirname, 'client'),
         exclude: /node_modules/,
         loader: "babel-loader"
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }      
     ]
   }
 };

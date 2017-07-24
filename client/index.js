@@ -3,8 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'react-router-redux'
-import Nav from './components/Nav.js';
-//import Main from '../components/Main.jsx';
+import Menu from './components/layouts/Menu.js';
+import Main from './components/layouts/Main.js';
 import store, { history } from './store.js';
 
 
@@ -12,7 +12,8 @@ const router = (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div>
-        <Nav />
+        <Menu />
+        <Main />
       </div>
     </ConnectedRouter>
   </Provider>
