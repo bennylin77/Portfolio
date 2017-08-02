@@ -4,7 +4,7 @@ import {
   RECEIVE_ARTICLE,
   REQUEST_ARTICLE_LIST,
   RECEIVE_ARTICLE_LIST
-} from '../actions/articleActions.js'
+} from 'actions/articleActions.js'
 
 export function selectedArticleTag(state = 'all', action) {
   switch (action.type) {

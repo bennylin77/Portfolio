@@ -1,6 +1,6 @@
 import {
   EDIT_ARTICLE
-} from '../actions/articleActions.js'
+} from 'actions/articleActions.js'
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import entities from './entities.js';

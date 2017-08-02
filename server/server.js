@@ -22,10 +22,11 @@ module.exports = {
     app.use(bodyParser.json());
     app.use(cookieParser());
     app.use("/api", articleController);
+    /*
     app.get("/*", function (req, res) {
       res.sendFile("index.html", {root: path.join(__dirname,"../public") })
     });
-
+    */
     return app;
   }
 }

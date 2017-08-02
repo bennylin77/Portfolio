@@ -2,7 +2,7 @@
 import {
   REQUEST_ARTICLE,
   RECEIVE_ARTICLE,
-} from '../actions/articleActions.js'
+} from 'actions/articleActions.js'
 import { article } from './articles.js';
 
 const entities = (state = { articles: {}, projects: {} }, action) => {

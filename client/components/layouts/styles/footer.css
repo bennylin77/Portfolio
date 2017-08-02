@@ -1,0 +1,50 @@
+/*======== contact ==========*/
+.footer_holder{
+	font-size: 17px;
+	width: 100%;
+}
+.footer_link_holder{
+  margin-bottom: 10px;
+  text-align: center
+}
+.footer_link_holder a{
+  margin: 0px 5px;
+}
+.footer_link_logo{
+  width: 25px;
+  vertical-align: middle
+}
+.footer_link_cv_holder{
+}
+.footer_link_cv{
+	color: #6d6d6d;
+	font-weight: bold;
+	font-size: 20px;
+	font-family: Arial Black;
+	display: inline-block;
+	margin-top: 5px;
+	vertical-align: middle;
+}
+.footer_link_cv_holder:hover,
+.footer_link_cv_holder:focus{
+  text-decoration: none;
+  color: #6d6d6d;
+}
+.footer_contact_type{
+	color: #6d6d6d;
+}
+.footer_contact_type_holder{
+	margin-bottom: 10px;
+}
+.footer_contact_type_holder_left,
+.footer_contact_type_holder_right{
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .footer_contact_type_holder_left{
+  	text-align: right;
+  }
+  .footer_contact_type_holder_right{
+    text-align: left;
+  }
+}

@@ -1,9 +1,9 @@
 import React from 'react';
-import Single from '../../components/article/Single.js';
+import Single from 'components/article/Single.js';
 import {
   fetchArticleList,
   deleteArticle
-} from '../../actions/articleActions.js';
+} from 'actions/articleActions.js';
 import { connect } from 'react-redux';
 
 
@@ -32,7 +32,7 @@ export class All extends React.Component {
     }
 
     return (
-  		<div className="container">
+  		<div className="container" style={{"padding-top": "100px"}}>
         {article_list.map( (id, i) =>
           {
             if(!articles[id])

@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import {Navbar, NavItem,  Nav, Image  } from 'react-bootstrap';
+import { Navbar, NavItem,  Nav, Image  } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import './menu.css';
+import './styles/menu.css';
 
 function Menu(props) {
   return (
-    <Navbar fixedTop collapseOnSelect>
+    <Navbar fixedTop collapseOnSelect fluid>
       <Navbar.Header>
         <Navbar.Brand>
           <Link to='/'>
-              <Image src="/favicon.ico" rounded className="underline" alt="CHI LIN"/>
+              <Image src="/favicon.ico" rounded alt="CHI LIN"/>
           </Link>
         </Navbar.Brand>
         <Navbar.Toggle />
@@ -18,11 +18,14 @@ function Menu(props) {
 
       <Navbar.Collapse>
         <Nav pullRight>
+          <LinkContainer to="/project">
+            <NavItem eventKey={1}>Project_</NavItem>
+          </LinkContainer>
           <LinkContainer to="/research">
-            <NavItem eventKey={2}>Research</NavItem>
+            <NavItem eventKey={2}>Research_</NavItem>
           </LinkContainer>
           <LinkContainer to="/article">
-            <NavItem eventKey={3}>Article</NavItem>
+            <NavItem eventKey={3}>Article_</NavItem>
           </LinkContainer>
         </Nav>
       </Navbar.Collapse>
