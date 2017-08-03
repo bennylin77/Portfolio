@@ -60,7 +60,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "0979b5cffca8c16cd0b0"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a31ddeb7f1c625050447"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -1243,6 +1243,163 @@ var Link = exports.Link = function Link(props) {
 
 /***/ }),
 
+/***/ "./client/components/editor/MediaControls.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MediaControls = undefined;
+exports.mediaBlockRenderer = mediaBlockRenderer;
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MediaControls = exports.MediaControls = function MediaControls(props) {
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'div',
+      { style: { marginBottom: 10 } },
+      'Use the buttons to add audio, image, or video.'
+    ),
+    _react2.default.createElement(
+      'div',
+      { style: { marginBottom: 10 } },
+      'Here are some local examples that can be entered as a URL:',
+      _react2.default.createElement(
+        'ul',
+        null,
+        _react2.default.createElement(
+          'li',
+          null,
+          'media.mp3'
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          'media.png'
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          'media.mp4'
+        )
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { style: styles.buttons },
+      _react2.default.createElement(
+        'button',
+        { onMouseDown: props.addAudio, style: { marginRight: 10 } },
+        'Add Audio'
+      ),
+      _react2.default.createElement(
+        'button',
+        { onMouseDown: props.addImage, style: { marginRight: 10 } },
+        'Add Image'
+      ),
+      _react2.default.createElement(
+        'button',
+        { onMouseDown: props.addVideo, style: { marginRight: 10 } },
+        'Add Video'
+      )
+    ),
+    props.showURLInput ? _react2.default.createElement(
+      'div',
+      { style: styles.urlInputContainer },
+      _react2.default.createElement('input', {
+        onChange: undefined.onChange,
+        ref: props.inputRef,
+        style: styles.urlInput,
+        type: 'text',
+        value: props.value,
+        onKeyDown: props.onKeyDown
+      }),
+      _react2.default.createElement(
+        'button',
+        { onMouseDown: undefined.confirmMedia },
+        'Confirm'
+      )
+    ) : _react2.default.createElement('div', null)
+  );
+};
+
+function mediaBlockRenderer(block) {
+  if (block.getType() === 'atomic') {
+    return {
+      component: Media,
+      editable: false
+    };
+  }
+  return null;
+}
+
+var Audio = function Audio(props) {
+  return _react2.default.createElement('audio', { controls: true, src: props.src, style: styles.media });
+};
+var Image = function Image(props) {
+  return _react2.default.createElement('img', { src: props.src, style: styles.media });
+};
+var Video = function Video(props) {
+  return _react2.default.createElement('video', { controls: true, src: props.src, style: styles.media });
+};
+var Media = function Media(props) {
+  var entity = props.contentState.getEntity(props.block.getEntityAt(0));
+
+  var _entity$getData = entity.getData(),
+      src = _entity$getData.src;
+
+  var type = entity.getType();
+  var media = void 0;
+  if (type === 'audio') {
+    media = _react2.default.createElement(Audio, { src: src });
+  } else if (type === 'image') {
+    media = _react2.default.createElement(Image, { src: src });
+  } else if (type === 'video') {
+    media = _react2.default.createElement(Video, { src: src });
+  }
+  return media;
+};
+
+var styles = {
+  buttons: {
+    marginBottom: 10
+  },
+  urlInputContainer: {
+    marginBottom: 10
+  },
+  urlInput: {
+    fontFamily: '\'Georgia\', serif',
+    marginRight: 10,
+    padding: 3
+  },
+  editor: {
+    border: '1px solid #ccc',
+    cursor: 'text',
+    minHeight: 80,
+    padding: 10
+  },
+  button: {
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  media: {
+    width: '100%'
+  }
+};
+//media
+
+/***/ }),
+
 /***/ "./client/components/editor/StyleButton.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1960,7 +2117,7 @@ var All = exports.All = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'container', style: { "padding-top": "100px" } },
         article_list.map(function (id, i) {
           if (!articles[id]) return _react2.default.createElement(
             'div',
@@ -2031,6 +2188,8 @@ var _InlineStyleControls2 = _interopRequireDefault(_InlineStyleControls);
 
 var _LinkControls = __webpack_require__("./client/components/editor/LinkControls.js");
 
+var _MediaControls = __webpack_require__("./client/components/editor/MediaControls.js");
+
 var _articleActions = __webpack_require__("./client/actions/articleActions.js");
 
 var _reactRedux = __webpack_require__("./node_modules/react-redux/es/index.js");
@@ -2064,11 +2223,17 @@ var BennyEditor = function (_React$Component) {
     //link
 
     if (props.content) _this.state = { editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(JSON.parse(props.content)), decorator),
-      showURLInput: false, //link
-      urlValue: '' //link
+      showLinkURLInput: false, //link
+      LinkURLValue: '', //link
+      showMediaURLInput: false, //media
+      MediaURLValue: '', //media
+      urlType: '' //media
     };else _this.state = { editorState: _draftJs.EditorState.createEmpty(decorator),
-      showURLInput: false, //link
-      urlValue: '' //link
+      showLinkURLInput: false, //link
+      LinkURLValue: '', //link
+      showMediaURLInput: false, //media
+      MediaURLValue: '', //media
+      urlType: '' //media
     };
     //this.focus = () => this.refs.editor.focus();
     _this.setDomEditorRef = function (ref) {
@@ -2092,13 +2257,27 @@ var BennyEditor = function (_React$Component) {
 
     //link
     _this.promptForLink = _this._promptForLink.bind(_this);
-    _this.onURLChange = function (e) {
-      return _this.setState({ urlValue: e.target.value });
-    };
+    _this.onLinkURLChange = function (e) {
+      return _this.setState({ LinkURLValue: e.target.value });
+    }; ///////
     _this.confirmLink = _this._confirmLink.bind(_this);
     _this.onLinkInputKeyDown = _this._onLinkInputKeyDown.bind(_this);
     _this.removeLink = _this._removeLink.bind(_this);
     //link
+    //media
+    _this.logState = function () {
+      var content = _this.state.editorState.getCurrentContent();
+      console.log((0, _draftJs.convertToRaw)(content));
+    };
+    _this.onMediaURLChange = function (e) {
+      return _this.setState({ MediaURLValue: e.target.value });
+    }; /////
+    _this.addAudio = _this._addAudio.bind(_this);
+    _this.addImage = _this._addImage.bind(_this);
+    _this.addVideo = _this._addVideo.bind(_this);
+    _this.confirmMedia = _this._confirmMedia.bind(_this);
+    _this.onMediaInputKeyDown = _this._onMediaInputKeyDown.bind(_this);
+    //media
     return _this;
   }
 
@@ -2170,11 +2349,11 @@ var BennyEditor = function (_React$Component) {
           url = linkInstance.getData().url;
         }
         this.setState({
-          showURLInput: true,
-          urlValue: url
+          showLinkURLInput: true,
+          LinkURLValue: url
         }, function () {
           setTimeout(function () {
-            return _this2.inputUrl.focus();
+            return _this2.inputLinkURL.focus();
           }, 0);
         });
       }
@@ -2187,16 +2366,16 @@ var BennyEditor = function (_React$Component) {
       e.preventDefault();
       var _state = this.state,
           editorState = _state.editorState,
-          urlValue = _state.urlValue;
+          LinkURLValue = _state.LinkURLValue;
 
       var contentState = editorState.getCurrentContent();
-      var contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: urlValue });
+      var contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: LinkURLValue });
       var entityKey = contentStateWithEntity.getLastCreatedEntityKey();
       var newEditorState = _draftJs.EditorState.set(editorState, { currentContent: contentStateWithEntity });
       this.setState({
         editorState: _draftJs.RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey),
-        showURLInput: false,
-        urlValue: ''
+        showLinkURLInput: false,
+        LinkURLValue: ''
       }, function () {
         setTimeout(function () {
           return _this3.domEditor.focus();
@@ -2225,10 +2404,79 @@ var BennyEditor = function (_React$Component) {
     }
     //link
 
+    //media
+
+  }, {
+    key: '_confirmMedia',
+    value: function _confirmMedia(e) {
+      var _this4 = this;
+
+      e.preventDefault();
+      var _state2 = this.state,
+          editorState = _state2.editorState,
+          urlValue = _state2.urlValue,
+          urlType = _state2.urlType;
+
+      var contentState = editorState.getCurrentContent();
+      var contentStateWithEntity = contentState.createEntity(urlType, 'IMMUTABLE', { src: urlValue });
+      var entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      var newEditorState = _draftJs.EditorState.set(editorState, { currentContent: contentStateWithEntity });
+      this.setState({
+        editorState: _draftJs.AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' '),
+        showMediaURLInput: false,
+        urlValue: ''
+      }, function () {
+        setTimeout(function () {
+          return _this4.domEditor.focus();
+        }, 0);
+      });
+    }
+  }, {
+    key: '_onMediaInputKeyDown',
+    value: function _onMediaInputKeyDown(e) {
+      if (e.which === 13) {
+        this._confirmMedia(e);
+      }
+    }
+  }, {
+    key: '_promptForMedia',
+    value: function _promptForMedia(type) {
+      var _this5 = this;
+
+      var editorState = this.state.editorState;
+
+      this.setState({
+        showMediaURLInput: true,
+        urlValue: '',
+        urlType: type
+      }, function () {
+        setTimeout(function () {
+          return _this5.inputMediaURL.focus();
+        }, 0);
+      });
+    }
+  }, {
+    key: '_addAudio',
+    value: function _addAudio() {
+      this._promptForMedia('audio');
+    }
+  }, {
+    key: '_addImage',
+    value: function _addImage() {
+      this._promptForMedia('image');
+    }
+  }, {
+    key: '_addVideo',
+    value: function _addVideo() {
+      this._promptForMedia('video');
+    }
+    //media
+
+
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this6 = this;
 
       var _props2 = this.props,
           id = _props2.id,
@@ -2244,7 +2492,6 @@ var BennyEditor = function (_React$Component) {
           className += ' RichEditor-hidePlaceholder';
         }
       }
-
       return _react2.default.createElement(
         'div',
         { className: 'RichEditor-root' },
@@ -2259,19 +2506,33 @@ var BennyEditor = function (_React$Component) {
         _react2.default.createElement(_LinkControls.LinkControls, {
           promptForLink: this.promptForLink,
           removeLink: this.removeLink,
-          showURLInput: this.state.showURLInput,
-          onChange: this.onURLChange,
-          value: this.state.urlValue,
+          showURLInput: this.state.showLinkURLInput,
+          onChange: this.onLinkURLChange,
+          value: this.state.LinkURLValue,
           onKeyDown: this.onLinkInputKeyDown,
           confirmLink: this.confirmLink,
           inputRef: function inputRef(el) {
-            return _this4.inputUrl = el;
+            return _this6.inputLinkURL = el;
           }
+        }),
+        _react2.default.createElement(_MediaControls.MediaControls, {
+          addAudio: this.addAudio,
+          addImage: this.addImage,
+          addVideo: this.addVideo,
+          showURLInput: this.state.showMediaURLInput,
+          onChange: this.onMediaURLChange,
+          inputRef: function inputRef(el) {
+            return _this6.inputMediaURL = el;
+          },
+          value: this.state.MediaURLValue,
+          onKeyDown: this.onMediaInputKeyDown,
+          confirmMedia: this.confirmMedia
         }),
         _react2.default.createElement(
           'div',
           { className: className, onClick: this.focus },
           _react2.default.createElement(_draftJs.Editor, {
+            blockRendererFn: _MediaControls.mediaBlockRenderer,
             blockStyleFn: getBlockStyle,
             customStyleMap: styleMap,
             editorState: editorState,
@@ -2282,7 +2543,16 @@ var BennyEditor = function (_React$Component) {
             ref: this.setDomEditorRef,
             spellCheck: true
           })
-        )
+        ),
+        _react2.default.createElement('input', {
+          onClick: this.logState,
+          style: {
+            marginTop: 10,
+            textAlign: 'center'
+          },
+          type: 'button',
+          value: 'Log State'
+        })
       );
     }
   }]);
@@ -2309,7 +2579,6 @@ function getBlockStyle(block) {
       return null;
   }
 }
-
 //connect
 function mapStateToProps(state) {
   return {};
@@ -2409,7 +2678,7 @@ var Edit = exports.Edit = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'container', style: { "padding-top": "100px" } },
         _react2.default.createElement(
           'div',
           { className: 'row' },

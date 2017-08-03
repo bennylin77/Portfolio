@@ -1,10 +1,12 @@
 import React from 'react';
 import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw,
+        AtomicBlockUtils,
         CompositeDecorator,
         ContentState} from 'draft-js';
 import BlockStyleControls from 'components/editor/BlockStyleControls.js';
 import InlineStyleControls from 'components/editor/InlineStyleControls.js';
 import {LinkControls, findLinkEntities, Link} from 'components/editor/LinkControls.js';
+import {MediaControls, mediaBlockRenderer} from 'components/editor/MediaControls.js';
 import {
   updateArticle
 } from 'actions/articleActions.js';
@@ -28,13 +30,19 @@ class BennyEditor extends React.Component {
 
     if(props.content)
       this.state = {editorState: EditorState.createWithContent( convertFromRaw( JSON.parse(props.content) ), decorator ),
-                    showURLInput: false,//link
-                    urlValue: '',//link
+                    showLinkURLInput: false,//link
+                    LinkURLValue: '',//link
+                    showMediaURLInput: false,//media
+                    MediaURLValue: '',//media
+                    urlType: '',//media
                    };
     else
       this.state = {editorState: EditorState.createEmpty(decorator),
-                    showURLInput: false,//link
-                    urlValue: '',//link
+                    showLinkURLInput: false,//link
+                    LinkURLValue: '',//link
+                    showMediaURLInput: false,//media
+                    MediaURLValue: '',//media
+                    urlType: '',//media
                    };
     //this.focus = () => this.refs.editor.focus();
     this.setDomEditorRef = ref => this.domEditor = ref;
@@ -46,11 +54,23 @@ class BennyEditor extends React.Component {
 
     //link
     this.promptForLink = this._promptForLink.bind(this);
-    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+    this.onLinkURLChange = (e) => this.setState({LinkURLValue: e.target.value});///////
     this.confirmLink = this._confirmLink.bind(this);
     this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
     this.removeLink = this._removeLink.bind(this);
     //link
+    //media
+    this.logState = () => {
+      const content = this.state.editorState.getCurrentContent();
+      console.log(convertToRaw(content));
+    };
+    this.onMediaURLChange = (e) => this.setState({MediaURLValue: e.target.value});/////
+    this.addAudio = this._addAudio.bind(this);
+    this.addImage = this._addImage.bind(this);
+    this.addVideo = this._addVideo.bind(this);
+    this.confirmMedia = this._confirmMedia.bind(this);
+    this.onMediaInputKeyDown = this._onMediaInputKeyDown.bind(this);
+    //media
   }
 
   componentDidMount(){
@@ -111,21 +131,21 @@ class BennyEditor extends React.Component {
         url = linkInstance.getData().url;
       }
       this.setState({
-        showURLInput: true,
-        urlValue: url,
+        showLinkURLInput: true,
+        LinkURLValue: url,
       }, () => {
-        setTimeout(() => this.inputUrl.focus(), 0);
+        setTimeout(() => this.inputLinkURL.focus(), 0);
       });
     }
   }
   _confirmLink(e) {
     e.preventDefault();
-    const {editorState, urlValue} = this.state;
+    const {editorState, LinkURLValue} = this.state;
     const contentState = editorState.getCurrentContent();
     const contentStateWithEntity = contentState.createEntity(
       'LINK',
       'MUTABLE',
-      {url: urlValue}
+      {url: LinkURLValue}
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
@@ -135,8 +155,8 @@ class BennyEditor extends React.Component {
         newEditorState.getSelection(),
         entityKey
       ),
-      showURLInput: false,
-      urlValue: '',
+      showLinkURLInput: false,
+      LinkURLValue: '',
     }, () => {
               setTimeout(() => this.domEditor.focus(), 0);
             });
@@ -158,8 +178,61 @@ class BennyEditor extends React.Component {
   }
   //link
 
-  render() {
+  //media
+  _confirmMedia(e) {
+    e.preventDefault();
+    const {editorState, MediaURLValue, urlType} = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      urlType,
+      'IMMUTABLE',
+      {src: MediaURLValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(
+      editorState,
+      {currentContent: contentStateWithEntity}
+    );
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        ' '
+      ),
+      showMediaURLInput: false,
+      MediaURLValue: '',
+    }, () => {
+      setTimeout(() => this.domEditor.focus(), 0);
+    });
+  }
+  _onMediaInputKeyDown(e) {
+    if (e.which === 13) {
+      this._confirmMedia(e);
+    }
+  }
+  _promptForMedia(type) {
+    const {editorState} = this.state;
+    this.setState({
+      showMediaURLInput: true,
+      MediaURLValue: '',
+      urlType: type,
+    }, () => {
+      setTimeout(() => this.inputMediaURL.focus(), 0);
+    });
+  }
+  _addAudio() {
+    this._promptForMedia('audio');
+  }
+  _addImage() {
+    this._promptForMedia('image');
+  }
+  _addVideo() {
+    this._promptForMedia('video');
+  }
+  //media
 
+
+  render() {
     const { id, content } = this.props;
     const { editorState } = this.state;
     // If the user changes block type before entering any text, we can
@@ -171,7 +244,6 @@ class BennyEditor extends React.Component {
         className += ' RichEditor-hidePlaceholder';
       }
     }
-
     return (
       <div className="RichEditor-root">
         <BlockStyleControls
@@ -185,15 +257,28 @@ class BennyEditor extends React.Component {
         <LinkControls
            promptForLink={this.promptForLink}
            removeLink={this.removeLink}
-           showURLInput={this.state.showURLInput}
-           onChange={this.onURLChange}
-           value={this.state.urlValue}
+           showURLInput={this.state.showLinkURLInput}
+           onChange={this.onLinkURLChange}
+           value={this.state.LinkURLValue}
            onKeyDown={this.onLinkInputKeyDown}
            confirmLink={this.confirmLink}
-           inputRef={el => this.inputUrl = el}
+           inputRef={el => this.inputLinkURL = el}
          />
+       <MediaControls
+            addAudio={this.addAudio}
+            addImage={this.addImage}
+            addVideo={this.addVideo}
+            showURLInput={this.state.showMediaURLInput}
+            onChange={this.onMediaURLChange}
+            inputRef={el => this.inputMediaURL = el}
+            value={this.state.MediaURLValue}
+            onKeyDown={this.onMediaInputKeyDown}
+            confirmMedia={this.confirmMedia}
+          />
+
         <div className={className} onClick={this.focus}>
           <Editor
+            blockRendererFn={mediaBlockRenderer}
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={editorState}
@@ -205,10 +290,21 @@ class BennyEditor extends React.Component {
             spellCheck={true}
           />
         </div>
+        <input
+          onClick={this.logState}
+          style={{
+            marginTop: 10,
+            textAlign: 'center',
+          }}
+          type="button"
+          value="Log State"
+        />
+
       </div>
     );
   }
 }
+
 
 
 
@@ -227,7 +323,6 @@ function getBlockStyle(block) {
           default: return null;
         }
 }
-
 //connect
 function mapStateToProps(state) {
   return {}
