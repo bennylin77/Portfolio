@@ -1,13 +1,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import BennyEditor from './BennyEditor.js';
-//import DanteEditor from './DanteEditor.js'
-//import PluginsEditor from './PluginsEditor.jsx';
+import BennyEditor from 'components/editor/BennyEditor.js';
 import {
-  editAndFetchArticleIfNeeded
+  editAndFetchArticleIfNeeded,
+  updateArticle
 } from 'actions/articleActions.js';
 //content
 export class Edit extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleEditorUpdate = this._handleEditorUpdate.bind(this);
+  }
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -15,6 +19,12 @@ export class Edit extends React.Component {
     //todo get article
     dispatch(editAndFetchArticleIfNeeded(id))
     //dispatch(editArticle(id))
+  }
+
+  //editor
+  _handleEditorUpdate(data){
+      const { dispatch } = this.props;
+      dispatch(updateArticle(data))
   }
 
   render() {
@@ -32,7 +42,7 @@ export class Edit extends React.Component {
       <div className="container" style={{"padding-top": "100px"}}>
         <div className="row">
           <div className="col-sm-12">
-            <BennyEditor id={article.id} content={articles[article.id].content} />
+            <BennyEditor id={article.id} content={articles[article.id].content} onEditorUpdate={this.handleEditorUpdate} />
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styles from './styles.js';
 
 export const MediaControls = (props) => {
     return (
@@ -45,8 +45,6 @@ export const MediaControls = (props) => {
     );
 };
 
-
-
 export function mediaBlockRenderer(block) {
   if (block.getType() === 'atomic') {
     return {
@@ -82,33 +80,3 @@ const Media = (props) => {
   }
   return media;
 };
-
-
-
-const styles = {
-  buttons: {
-    marginBottom: 10,
-  },
-  urlInputContainer: {
-    marginBottom: 10,
-  },
-  urlInput: {
-    fontFamily: '\'Georgia\', serif',
-    marginRight: 10,
-    padding: 3,
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 80,
-    padding: 10,
-  },
-  button: {
-    marginTop: 10,
-    textAlign: 'center',
-  },
-  media: {
-    width: '100%',
-  },
-};
-//media

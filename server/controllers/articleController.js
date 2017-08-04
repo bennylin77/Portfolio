@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Article = require("../schema/article");
 const router = require("express").Router();
 
-router.get('/articles', all);
-router.get('/articles/add', add);
-router.get('/articles/:id', single);
-router.route("/articles/:id").put(update).delete(destroy);
+router.get('/', all);
+router.get('/add', add);
+//router.get('/:id', single);
+router.route("/:id").get(single).put(update).delete(destroy);
 
 function all(req, res) {
   Article.find( {}, 'id',function (err, articles) {

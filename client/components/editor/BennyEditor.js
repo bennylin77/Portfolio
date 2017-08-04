@@ -7,11 +7,7 @@ import BlockStyleControls from 'components/editor/BlockStyleControls.js';
 import InlineStyleControls from 'components/editor/InlineStyleControls.js';
 import {LinkControls, findLinkEntities, Link} from 'components/editor/LinkControls.js';
 import {MediaControls, mediaBlockRenderer} from 'components/editor/MediaControls.js';
-import {
-  updateArticle
-} from 'actions/articleActions.js';
-import { connect } from 'react-redux';
-import './rich_editor.css';
+import './editor.css';
 import 'draft-js/dist/Draft.css';
 
 //content
@@ -78,12 +74,13 @@ class BennyEditor extends React.Component {
   }
 
   _handleOnChange(editorState){
-    const { dispatch, id } = this.props;
+    //const { dispatch, id } = this.props;
+    const { id, onEditorUpdate } = this.props;
     this.setState({editorState});
     const rawdata = convertToRaw(this.state.editorState.getCurrentContent())
     const data = { id: id, content: rawdata }
-    dispatch(updateArticle(data))
-
+    //dispatch(updateArticle(data))
+    onEditorUpdate(data);
   }
   _handleKeyCommand(command) {
     const {editorState} = this.state;
@@ -323,9 +320,5 @@ function getBlockStyle(block) {
           default: return null;
         }
 }
-//connect
-function mapStateToProps(state) {
-  return {}
-}
-const App = connect(mapStateToProps)(BennyEditor);
-export default App;
+
+export default BennyEditor;

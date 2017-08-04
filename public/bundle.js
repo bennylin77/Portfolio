@@ -60,7 +60,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "a31ddeb7f1c625050447"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "469bc1dd316832e44def"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -1044,6 +1044,428 @@ exports.default = Single;
 
 /***/ }),
 
+/***/ "./client/components/editor/BennyEditor.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _draftJs = __webpack_require__("./node_modules/draft-js/lib/Draft.js");
+
+var _BlockStyleControls = __webpack_require__("./client/components/editor/BlockStyleControls.js");
+
+var _BlockStyleControls2 = _interopRequireDefault(_BlockStyleControls);
+
+var _InlineStyleControls = __webpack_require__("./client/components/editor/InlineStyleControls.js");
+
+var _InlineStyleControls2 = _interopRequireDefault(_InlineStyleControls);
+
+var _LinkControls = __webpack_require__("./client/components/editor/LinkControls.js");
+
+var _MediaControls = __webpack_require__("./client/components/editor/MediaControls.js");
+
+__webpack_require__("./client/components/editor/editor.css");
+
+__webpack_require__("./node_modules/draft-js/dist/Draft.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+//content
+var BennyEditor = function (_React$Component) {
+  _inherits(BennyEditor, _React$Component);
+
+  function BennyEditor(props) {
+    _classCallCheck(this, BennyEditor);
+
+    //link
+    var _this = _possibleConstructorReturn(this, (BennyEditor.__proto__ || Object.getPrototypeOf(BennyEditor)).call(this, props));
+
+    var decorator = new _draftJs.CompositeDecorator([{
+      strategy: _LinkControls.findLinkEntities,
+      component: _LinkControls.Link
+    }]);
+    //link
+
+    if (props.content) _this.state = { editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(JSON.parse(props.content)), decorator),
+      showLinkURLInput: false, //link
+      LinkURLValue: '', //link
+      showMediaURLInput: false, //media
+      MediaURLValue: '', //media
+      urlType: '' //media
+    };else _this.state = { editorState: _draftJs.EditorState.createEmpty(decorator),
+      showLinkURLInput: false, //link
+      LinkURLValue: '', //link
+      showMediaURLInput: false, //media
+      MediaURLValue: '', //media
+      urlType: '' //media
+    };
+    //this.focus = () => this.refs.editor.focus();
+    _this.setDomEditorRef = function (ref) {
+      return _this.domEditor = ref;
+    };
+    _this.onChange = function (editorState) {
+      return _this._handleOnChange(editorState);
+    };
+    _this.handleKeyCommand = function (command) {
+      return _this._handleKeyCommand(command);
+    };
+    _this.onTab = function (e) {
+      return _this._onTab(e);
+    };
+    _this.toggleBlockType = function (type) {
+      return _this._toggleBlockType(type);
+    };
+    _this.toggleInlineStyle = function (style) {
+      return _this._toggleInlineStyle(style);
+    };
+
+    //link
+    _this.promptForLink = _this._promptForLink.bind(_this);
+    _this.onLinkURLChange = function (e) {
+      return _this.setState({ LinkURLValue: e.target.value });
+    }; ///////
+    _this.confirmLink = _this._confirmLink.bind(_this);
+    _this.onLinkInputKeyDown = _this._onLinkInputKeyDown.bind(_this);
+    _this.removeLink = _this._removeLink.bind(_this);
+    //link
+    //media
+    _this.logState = function () {
+      var content = _this.state.editorState.getCurrentContent();
+      console.log((0, _draftJs.convertToRaw)(content));
+    };
+    _this.onMediaURLChange = function (e) {
+      return _this.setState({ MediaURLValue: e.target.value });
+    }; /////
+    _this.addAudio = _this._addAudio.bind(_this);
+    _this.addImage = _this._addImage.bind(_this);
+    _this.addVideo = _this._addVideo.bind(_this);
+    _this.confirmMedia = _this._confirmMedia.bind(_this);
+    _this.onMediaInputKeyDown = _this._onMediaInputKeyDown.bind(_this);
+    //media
+    return _this;
+  }
+
+  _createClass(BennyEditor, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.domEditor.focus();
+    }
+  }, {
+    key: '_handleOnChange',
+    value: function _handleOnChange(editorState) {
+      //const { dispatch, id } = this.props;
+      var _props = this.props,
+          id = _props.id,
+          onEditorUpdate = _props.onEditorUpdate;
+
+      this.setState({ editorState: editorState });
+      var rawdata = (0, _draftJs.convertToRaw)(this.state.editorState.getCurrentContent());
+      var data = { id: id, content: rawdata
+        //dispatch(updateArticle(data))
+      };onEditorUpdate(data);
+    }
+  }, {
+    key: '_handleKeyCommand',
+    value: function _handleKeyCommand(command) {
+      var editorState = this.state.editorState;
+
+      var newState = _draftJs.RichUtils.handleKeyCommand(editorState, command);
+      if (newState) {
+        this.onChange(newState);
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: '_onTab',
+    value: function _onTab(e) {
+      var maxDepth = 4;
+      this.onChange(_draftJs.RichUtils.onTab(e, this.state.editorState, maxDepth));
+    }
+  }, {
+    key: '_toggleBlockType',
+    value: function _toggleBlockType(blockType) {
+      this.onChange(_draftJs.RichUtils.toggleBlockType(this.state.editorState, blockType));
+    }
+  }, {
+    key: '_toggleInlineStyle',
+    value: function _toggleInlineStyle(inlineStyle) {
+      this.onChange(_draftJs.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
+    }
+    //link
+
+  }, {
+    key: '_promptForLink',
+    value: function _promptForLink(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      var editorState = this.state.editorState;
+
+      var selection = editorState.getSelection();
+      if (!selection.isCollapsed()) {
+        var contentState = editorState.getCurrentContent();
+        var startKey = editorState.getSelection().getStartKey();
+        var startOffset = editorState.getSelection().getStartOffset();
+        var blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+        var linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+        var url = '';
+        if (linkKey) {
+          var linkInstance = contentState.getEntity(linkKey);
+          url = linkInstance.getData().url;
+        }
+        this.setState({
+          showLinkURLInput: true,
+          LinkURLValue: url
+        }, function () {
+          setTimeout(function () {
+            return _this2.inputLinkURL.focus();
+          }, 0);
+        });
+      }
+    }
+  }, {
+    key: '_confirmLink',
+    value: function _confirmLink(e) {
+      var _this3 = this;
+
+      e.preventDefault();
+      var _state = this.state,
+          editorState = _state.editorState,
+          LinkURLValue = _state.LinkURLValue;
+
+      var contentState = editorState.getCurrentContent();
+      var contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: LinkURLValue });
+      var entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      var newEditorState = _draftJs.EditorState.set(editorState, { currentContent: contentStateWithEntity });
+      this.setState({
+        editorState: _draftJs.RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey),
+        showLinkURLInput: false,
+        LinkURLValue: ''
+      }, function () {
+        setTimeout(function () {
+          return _this3.domEditor.focus();
+        }, 0);
+      });
+    }
+  }, {
+    key: '_onLinkInputKeyDown',
+    value: function _onLinkInputKeyDown(e) {
+      if (e.which === 13) {
+        this._confirmLink(e);
+      }
+    }
+  }, {
+    key: '_removeLink',
+    value: function _removeLink(e) {
+      e.preventDefault();
+      var editorState = this.state.editorState;
+
+      var selection = editorState.getSelection();
+      if (!selection.isCollapsed()) {
+        this.setState({
+          editorState: _draftJs.RichUtils.toggleLink(editorState, selection, null)
+        });
+      }
+    }
+    //link
+
+    //media
+
+  }, {
+    key: '_confirmMedia',
+    value: function _confirmMedia(e) {
+      var _this4 = this;
+
+      e.preventDefault();
+      var _state2 = this.state,
+          editorState = _state2.editorState,
+          MediaURLValue = _state2.MediaURLValue,
+          urlType = _state2.urlType;
+
+      var contentState = editorState.getCurrentContent();
+      var contentStateWithEntity = contentState.createEntity(urlType, 'IMMUTABLE', { src: MediaURLValue });
+      var entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      var newEditorState = _draftJs.EditorState.set(editorState, { currentContent: contentStateWithEntity });
+      this.setState({
+        editorState: _draftJs.AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' '),
+        showMediaURLInput: false,
+        MediaURLValue: ''
+      }, function () {
+        setTimeout(function () {
+          return _this4.domEditor.focus();
+        }, 0);
+      });
+    }
+  }, {
+    key: '_onMediaInputKeyDown',
+    value: function _onMediaInputKeyDown(e) {
+      if (e.which === 13) {
+        this._confirmMedia(e);
+      }
+    }
+  }, {
+    key: '_promptForMedia',
+    value: function _promptForMedia(type) {
+      var _this5 = this;
+
+      var editorState = this.state.editorState;
+
+      this.setState({
+        showMediaURLInput: true,
+        MediaURLValue: '',
+        urlType: type
+      }, function () {
+        setTimeout(function () {
+          return _this5.inputMediaURL.focus();
+        }, 0);
+      });
+    }
+  }, {
+    key: '_addAudio',
+    value: function _addAudio() {
+      this._promptForMedia('audio');
+    }
+  }, {
+    key: '_addImage',
+    value: function _addImage() {
+      this._promptForMedia('image');
+    }
+  }, {
+    key: '_addVideo',
+    value: function _addVideo() {
+      this._promptForMedia('video');
+    }
+    //media
+
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this6 = this;
+
+      var _props2 = this.props,
+          id = _props2.id,
+          content = _props2.content;
+      var editorState = this.state.editorState;
+      // If the user changes block type before entering any text, we can
+      // either style the placeholder or hide it. Let's just hide it now.
+
+      var className = 'RichEditor-editor';
+      var contentState = editorState.getCurrentContent();
+      if (!contentState.hasText()) {
+        if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+          className += ' RichEditor-hidePlaceholder';
+        }
+      }
+      return _react2.default.createElement(
+        'div',
+        { className: 'RichEditor-root' },
+        _react2.default.createElement(_BlockStyleControls2.default, {
+          editorState: editorState,
+          onToggle: this.toggleBlockType
+        }),
+        _react2.default.createElement(_InlineStyleControls2.default, {
+          editorState: editorState,
+          onToggle: this.toggleInlineStyle
+        }),
+        _react2.default.createElement(_LinkControls.LinkControls, {
+          promptForLink: this.promptForLink,
+          removeLink: this.removeLink,
+          showURLInput: this.state.showLinkURLInput,
+          onChange: this.onLinkURLChange,
+          value: this.state.LinkURLValue,
+          onKeyDown: this.onLinkInputKeyDown,
+          confirmLink: this.confirmLink,
+          inputRef: function inputRef(el) {
+            return _this6.inputLinkURL = el;
+          }
+        }),
+        _react2.default.createElement(_MediaControls.MediaControls, {
+          addAudio: this.addAudio,
+          addImage: this.addImage,
+          addVideo: this.addVideo,
+          showURLInput: this.state.showMediaURLInput,
+          onChange: this.onMediaURLChange,
+          inputRef: function inputRef(el) {
+            return _this6.inputMediaURL = el;
+          },
+          value: this.state.MediaURLValue,
+          onKeyDown: this.onMediaInputKeyDown,
+          confirmMedia: this.confirmMedia
+        }),
+        _react2.default.createElement(
+          'div',
+          { className: className, onClick: this.focus },
+          _react2.default.createElement(_draftJs.Editor, {
+            blockRendererFn: _MediaControls.mediaBlockRenderer,
+            blockStyleFn: getBlockStyle,
+            customStyleMap: styleMap,
+            editorState: editorState,
+            handleKeyCommand: this.handleKeyCommand,
+            onChange: this.onChange,
+            onTab: this.onTab,
+            placeholder: 'Tell a story...',
+            ref: this.setDomEditorRef,
+            spellCheck: true
+          })
+        ),
+        _react2.default.createElement('input', {
+          onClick: this.logState,
+          style: {
+            marginTop: 10,
+            textAlign: 'center'
+          },
+          type: 'button',
+          value: 'Log State'
+        })
+      );
+    }
+  }]);
+
+  return BennyEditor;
+}(_react2.default.Component);
+
+// Custom overrides for "code" style.
+
+
+var styleMap = {
+  CODE: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+    fontSize: 16,
+    padding: 2
+  }
+};
+function getBlockStyle(block) {
+  switch (block.getType()) {
+    case 'blockquote':
+      return 'RichEditor-blockquote';
+    default:
+      return null;
+  }
+}
+
+exports.default = BennyEditor;
+
+/***/ }),
+
 /***/ "./client/components/editor/BlockStyleControls.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1145,49 +1567,19 @@ var _react = __webpack_require__("./node_modules/react/react.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _styles = __webpack_require__("./client/components/editor/styles.js");
+
+var _styles2 = _interopRequireDefault(_styles);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var styles = {
-  root: {
-    fontFamily: '\'Georgia\', serif',
-    padding: 20,
-    width: 600
-  },
-  buttons: {
-    marginBottom: 10
-  },
-  urlInputContainer: {
-    marginBottom: 10
-  },
-  urlInput: {
-    fontFamily: '\'Georgia\', serif',
-    marginRight: 10,
-    padding: 3
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 80,
-    padding: 10
-  },
-  button: {
-    marginTop: 10,
-    textAlign: 'center'
-  },
-  link: {
-    color: '#3b5998',
-    textDecoration: 'underline'
-  }
-};
-
 var LinkControls = exports.LinkControls = function LinkControls(props) {
-  //if(props.showURLInput){
   return _react2.default.createElement(
     'div',
     null,
     _react2.default.createElement(
       'div',
-      { style: styles.buttons },
+      { style: _styles2.default.buttons },
       _react2.default.createElement(
         'button',
         {
@@ -1203,11 +1595,11 @@ var LinkControls = exports.LinkControls = function LinkControls(props) {
     ),
     props.showURLInput ? _react2.default.createElement(
       'div',
-      { style: styles.urlInputContainer },
+      { style: _styles2.default.urlInputContainer },
       _react2.default.createElement('input', {
         onChange: props.onChange,
         ref: props.inputRef,
-        style: styles.urlInput,
+        style: _styles2.default.urlInput,
         type: 'text',
         value: props.value,
         onKeyDown: props.onKeyDown
@@ -1219,11 +1611,7 @@ var LinkControls = exports.LinkControls = function LinkControls(props) {
       )
     ) : _react2.default.createElement('div', null)
   );
-  //}else {
-  //  return(<div></div>);
-  //}
 };
-
 function findLinkEntities(contentBlock, callback, contentState) {
   contentBlock.findEntityRanges(function (character) {
     var entityKey = character.getEntity();
@@ -1236,7 +1624,7 @@ var Link = exports.Link = function Link(props) {
 
   return _react2.default.createElement(
     'a',
-    { href: url, style: styles.link },
+    { href: url, style: _styles2.default.link },
     props.children
   );
 };
@@ -1258,6 +1646,10 @@ exports.mediaBlockRenderer = mediaBlockRenderer;
 var _react = __webpack_require__("./node_modules/react/react.js");
 
 var _react2 = _interopRequireDefault(_react);
+
+var _styles = __webpack_require__("./client/components/editor/styles.js");
+
+var _styles2 = _interopRequireDefault(_styles);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1296,7 +1688,7 @@ var MediaControls = exports.MediaControls = function MediaControls(props) {
     ),
     _react2.default.createElement(
       'div',
-      { style: styles.buttons },
+      { style: _styles2.default.buttons },
       _react2.default.createElement(
         'button',
         { onMouseDown: props.addAudio, style: { marginRight: 10 } },
@@ -1315,18 +1707,18 @@ var MediaControls = exports.MediaControls = function MediaControls(props) {
     ),
     props.showURLInput ? _react2.default.createElement(
       'div',
-      { style: styles.urlInputContainer },
+      { style: _styles2.default.urlInputContainer },
       _react2.default.createElement('input', {
-        onChange: undefined.onChange,
+        onChange: props.onChange,
         ref: props.inputRef,
-        style: styles.urlInput,
+        style: _styles2.default.urlInput,
         type: 'text',
         value: props.value,
         onKeyDown: props.onKeyDown
       }),
       _react2.default.createElement(
         'button',
-        { onMouseDown: undefined.confirmMedia },
+        { onMouseDown: props.confirmMedia },
         'Confirm'
       )
     ) : _react2.default.createElement('div', null)
@@ -1344,13 +1736,13 @@ function mediaBlockRenderer(block) {
 }
 
 var Audio = function Audio(props) {
-  return _react2.default.createElement('audio', { controls: true, src: props.src, style: styles.media });
+  return _react2.default.createElement('audio', { controls: true, src: props.src, style: _styles2.default.media });
 };
 var Image = function Image(props) {
-  return _react2.default.createElement('img', { src: props.src, style: styles.media });
+  return _react2.default.createElement('img', { src: props.src, style: _styles2.default.media });
 };
 var Video = function Video(props) {
-  return _react2.default.createElement('video', { controls: true, src: props.src, style: styles.media });
+  return _react2.default.createElement('video', { controls: true, src: props.src, style: _styles2.default.media });
 };
 var Media = function Media(props) {
   var entity = props.contentState.getEntity(props.block.getEntityAt(0));
@@ -1369,34 +1761,6 @@ var Media = function Media(props) {
   }
   return media;
 };
-
-var styles = {
-  buttons: {
-    marginBottom: 10
-  },
-  urlInputContainer: {
-    marginBottom: 10
-  },
-  urlInput: {
-    fontFamily: '\'Georgia\', serif',
-    marginRight: 10,
-    padding: 3
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 80,
-    padding: 10
-  },
-  button: {
-    marginTop: 10,
-    textAlign: 'center'
-  },
-  media: {
-    width: '100%'
-  }
-};
-//media
 
 /***/ }),
 
@@ -1458,6 +1822,86 @@ var StyleButton = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = StyleButton;
+
+/***/ }),
+
+/***/ "./client/components/editor/editor.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./client/components/editor/editor.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/style-loader/lib/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(true) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("./node_modules/css-loader/index.js!./client/components/editor/editor.css", function() {
+			var newContent = __webpack_require__("./node_modules/css-loader/index.js!./client/components/editor/editor.css");
+			if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./client/components/editor/styles.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var styles = {
+  root: {
+    fontFamily: '\'Georgia\', serif',
+    padding: 20,
+    width: 600
+  },
+  buttons: {
+    marginBottom: 10
+  },
+  urlInputContainer: {
+    marginBottom: 10
+  },
+  urlInput: {
+    fontFamily: '\'Georgia\', serif',
+    marginRight: 10,
+    padding: 3
+  },
+  editor: {
+    border: '1px solid #ccc',
+    cursor: 'text',
+    minHeight: 80,
+    padding: 10
+  },
+  button: {
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  link: {
+    color: '#3b5998',
+    textDecoration: 'underline'
+  },
+  media: {
+    width: '100%'
+  }
+};
+exports.default = styles;
 
 /***/ }),
 
@@ -2160,434 +2604,6 @@ exports.default = App;
 
 /***/ }),
 
-/***/ "./client/containers/article/BennyEditor.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _draftJs = __webpack_require__("./node_modules/draft-js/lib/Draft.js");
-
-var _BlockStyleControls = __webpack_require__("./client/components/editor/BlockStyleControls.js");
-
-var _BlockStyleControls2 = _interopRequireDefault(_BlockStyleControls);
-
-var _InlineStyleControls = __webpack_require__("./client/components/editor/InlineStyleControls.js");
-
-var _InlineStyleControls2 = _interopRequireDefault(_InlineStyleControls);
-
-var _LinkControls = __webpack_require__("./client/components/editor/LinkControls.js");
-
-var _MediaControls = __webpack_require__("./client/components/editor/MediaControls.js");
-
-var _articleActions = __webpack_require__("./client/actions/articleActions.js");
-
-var _reactRedux = __webpack_require__("./node_modules/react-redux/es/index.js");
-
-__webpack_require__("./client/containers/article/rich_editor.css");
-
-__webpack_require__("./node_modules/draft-js/dist/Draft.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-//content
-var BennyEditor = function (_React$Component) {
-  _inherits(BennyEditor, _React$Component);
-
-  function BennyEditor(props) {
-    _classCallCheck(this, BennyEditor);
-
-    //link
-    var _this = _possibleConstructorReturn(this, (BennyEditor.__proto__ || Object.getPrototypeOf(BennyEditor)).call(this, props));
-
-    var decorator = new _draftJs.CompositeDecorator([{
-      strategy: _LinkControls.findLinkEntities,
-      component: _LinkControls.Link
-    }]);
-    //link
-
-    if (props.content) _this.state = { editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(JSON.parse(props.content)), decorator),
-      showLinkURLInput: false, //link
-      LinkURLValue: '', //link
-      showMediaURLInput: false, //media
-      MediaURLValue: '', //media
-      urlType: '' //media
-    };else _this.state = { editorState: _draftJs.EditorState.createEmpty(decorator),
-      showLinkURLInput: false, //link
-      LinkURLValue: '', //link
-      showMediaURLInput: false, //media
-      MediaURLValue: '', //media
-      urlType: '' //media
-    };
-    //this.focus = () => this.refs.editor.focus();
-    _this.setDomEditorRef = function (ref) {
-      return _this.domEditor = ref;
-    };
-    _this.onChange = function (editorState) {
-      return _this._handleOnChange(editorState);
-    };
-    _this.handleKeyCommand = function (command) {
-      return _this._handleKeyCommand(command);
-    };
-    _this.onTab = function (e) {
-      return _this._onTab(e);
-    };
-    _this.toggleBlockType = function (type) {
-      return _this._toggleBlockType(type);
-    };
-    _this.toggleInlineStyle = function (style) {
-      return _this._toggleInlineStyle(style);
-    };
-
-    //link
-    _this.promptForLink = _this._promptForLink.bind(_this);
-    _this.onLinkURLChange = function (e) {
-      return _this.setState({ LinkURLValue: e.target.value });
-    }; ///////
-    _this.confirmLink = _this._confirmLink.bind(_this);
-    _this.onLinkInputKeyDown = _this._onLinkInputKeyDown.bind(_this);
-    _this.removeLink = _this._removeLink.bind(_this);
-    //link
-    //media
-    _this.logState = function () {
-      var content = _this.state.editorState.getCurrentContent();
-      console.log((0, _draftJs.convertToRaw)(content));
-    };
-    _this.onMediaURLChange = function (e) {
-      return _this.setState({ MediaURLValue: e.target.value });
-    }; /////
-    _this.addAudio = _this._addAudio.bind(_this);
-    _this.addImage = _this._addImage.bind(_this);
-    _this.addVideo = _this._addVideo.bind(_this);
-    _this.confirmMedia = _this._confirmMedia.bind(_this);
-    _this.onMediaInputKeyDown = _this._onMediaInputKeyDown.bind(_this);
-    //media
-    return _this;
-  }
-
-  _createClass(BennyEditor, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.domEditor.focus();
-    }
-  }, {
-    key: '_handleOnChange',
-    value: function _handleOnChange(editorState) {
-      var _props = this.props,
-          dispatch = _props.dispatch,
-          id = _props.id;
-
-      this.setState({ editorState: editorState });
-      var rawdata = (0, _draftJs.convertToRaw)(this.state.editorState.getCurrentContent());
-      var data = { id: id, content: rawdata };
-      dispatch((0, _articleActions.updateArticle)(data));
-    }
-  }, {
-    key: '_handleKeyCommand',
-    value: function _handleKeyCommand(command) {
-      var editorState = this.state.editorState;
-
-      var newState = _draftJs.RichUtils.handleKeyCommand(editorState, command);
-      if (newState) {
-        this.onChange(newState);
-        return true;
-      }
-      return false;
-    }
-  }, {
-    key: '_onTab',
-    value: function _onTab(e) {
-      var maxDepth = 4;
-      this.onChange(_draftJs.RichUtils.onTab(e, this.state.editorState, maxDepth));
-    }
-  }, {
-    key: '_toggleBlockType',
-    value: function _toggleBlockType(blockType) {
-      this.onChange(_draftJs.RichUtils.toggleBlockType(this.state.editorState, blockType));
-    }
-  }, {
-    key: '_toggleInlineStyle',
-    value: function _toggleInlineStyle(inlineStyle) {
-      this.onChange(_draftJs.RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle));
-    }
-    //link
-
-  }, {
-    key: '_promptForLink',
-    value: function _promptForLink(e) {
-      var _this2 = this;
-
-      e.preventDefault();
-      var editorState = this.state.editorState;
-
-      var selection = editorState.getSelection();
-      if (!selection.isCollapsed()) {
-        var contentState = editorState.getCurrentContent();
-        var startKey = editorState.getSelection().getStartKey();
-        var startOffset = editorState.getSelection().getStartOffset();
-        var blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
-        var linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
-        var url = '';
-        if (linkKey) {
-          var linkInstance = contentState.getEntity(linkKey);
-          url = linkInstance.getData().url;
-        }
-        this.setState({
-          showLinkURLInput: true,
-          LinkURLValue: url
-        }, function () {
-          setTimeout(function () {
-            return _this2.inputLinkURL.focus();
-          }, 0);
-        });
-      }
-    }
-  }, {
-    key: '_confirmLink',
-    value: function _confirmLink(e) {
-      var _this3 = this;
-
-      e.preventDefault();
-      var _state = this.state,
-          editorState = _state.editorState,
-          LinkURLValue = _state.LinkURLValue;
-
-      var contentState = editorState.getCurrentContent();
-      var contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: LinkURLValue });
-      var entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-      var newEditorState = _draftJs.EditorState.set(editorState, { currentContent: contentStateWithEntity });
-      this.setState({
-        editorState: _draftJs.RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey),
-        showLinkURLInput: false,
-        LinkURLValue: ''
-      }, function () {
-        setTimeout(function () {
-          return _this3.domEditor.focus();
-        }, 0);
-      });
-    }
-  }, {
-    key: '_onLinkInputKeyDown',
-    value: function _onLinkInputKeyDown(e) {
-      if (e.which === 13) {
-        this._confirmLink(e);
-      }
-    }
-  }, {
-    key: '_removeLink',
-    value: function _removeLink(e) {
-      e.preventDefault();
-      var editorState = this.state.editorState;
-
-      var selection = editorState.getSelection();
-      if (!selection.isCollapsed()) {
-        this.setState({
-          editorState: _draftJs.RichUtils.toggleLink(editorState, selection, null)
-        });
-      }
-    }
-    //link
-
-    //media
-
-  }, {
-    key: '_confirmMedia',
-    value: function _confirmMedia(e) {
-      var _this4 = this;
-
-      e.preventDefault();
-      var _state2 = this.state,
-          editorState = _state2.editorState,
-          urlValue = _state2.urlValue,
-          urlType = _state2.urlType;
-
-      var contentState = editorState.getCurrentContent();
-      var contentStateWithEntity = contentState.createEntity(urlType, 'IMMUTABLE', { src: urlValue });
-      var entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-      var newEditorState = _draftJs.EditorState.set(editorState, { currentContent: contentStateWithEntity });
-      this.setState({
-        editorState: _draftJs.AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' '),
-        showMediaURLInput: false,
-        urlValue: ''
-      }, function () {
-        setTimeout(function () {
-          return _this4.domEditor.focus();
-        }, 0);
-      });
-    }
-  }, {
-    key: '_onMediaInputKeyDown',
-    value: function _onMediaInputKeyDown(e) {
-      if (e.which === 13) {
-        this._confirmMedia(e);
-      }
-    }
-  }, {
-    key: '_promptForMedia',
-    value: function _promptForMedia(type) {
-      var _this5 = this;
-
-      var editorState = this.state.editorState;
-
-      this.setState({
-        showMediaURLInput: true,
-        urlValue: '',
-        urlType: type
-      }, function () {
-        setTimeout(function () {
-          return _this5.inputMediaURL.focus();
-        }, 0);
-      });
-    }
-  }, {
-    key: '_addAudio',
-    value: function _addAudio() {
-      this._promptForMedia('audio');
-    }
-  }, {
-    key: '_addImage',
-    value: function _addImage() {
-      this._promptForMedia('image');
-    }
-  }, {
-    key: '_addVideo',
-    value: function _addVideo() {
-      this._promptForMedia('video');
-    }
-    //media
-
-
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this6 = this;
-
-      var _props2 = this.props,
-          id = _props2.id,
-          content = _props2.content;
-      var editorState = this.state.editorState;
-      // If the user changes block type before entering any text, we can
-      // either style the placeholder or hide it. Let's just hide it now.
-
-      var className = 'RichEditor-editor';
-      var contentState = editorState.getCurrentContent();
-      if (!contentState.hasText()) {
-        if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-          className += ' RichEditor-hidePlaceholder';
-        }
-      }
-      return _react2.default.createElement(
-        'div',
-        { className: 'RichEditor-root' },
-        _react2.default.createElement(_BlockStyleControls2.default, {
-          editorState: editorState,
-          onToggle: this.toggleBlockType
-        }),
-        _react2.default.createElement(_InlineStyleControls2.default, {
-          editorState: editorState,
-          onToggle: this.toggleInlineStyle
-        }),
-        _react2.default.createElement(_LinkControls.LinkControls, {
-          promptForLink: this.promptForLink,
-          removeLink: this.removeLink,
-          showURLInput: this.state.showLinkURLInput,
-          onChange: this.onLinkURLChange,
-          value: this.state.LinkURLValue,
-          onKeyDown: this.onLinkInputKeyDown,
-          confirmLink: this.confirmLink,
-          inputRef: function inputRef(el) {
-            return _this6.inputLinkURL = el;
-          }
-        }),
-        _react2.default.createElement(_MediaControls.MediaControls, {
-          addAudio: this.addAudio,
-          addImage: this.addImage,
-          addVideo: this.addVideo,
-          showURLInput: this.state.showMediaURLInput,
-          onChange: this.onMediaURLChange,
-          inputRef: function inputRef(el) {
-            return _this6.inputMediaURL = el;
-          },
-          value: this.state.MediaURLValue,
-          onKeyDown: this.onMediaInputKeyDown,
-          confirmMedia: this.confirmMedia
-        }),
-        _react2.default.createElement(
-          'div',
-          { className: className, onClick: this.focus },
-          _react2.default.createElement(_draftJs.Editor, {
-            blockRendererFn: _MediaControls.mediaBlockRenderer,
-            blockStyleFn: getBlockStyle,
-            customStyleMap: styleMap,
-            editorState: editorState,
-            handleKeyCommand: this.handleKeyCommand,
-            onChange: this.onChange,
-            onTab: this.onTab,
-            placeholder: 'Tell a story...',
-            ref: this.setDomEditorRef,
-            spellCheck: true
-          })
-        ),
-        _react2.default.createElement('input', {
-          onClick: this.logState,
-          style: {
-            marginTop: 10,
-            textAlign: 'center'
-          },
-          type: 'button',
-          value: 'Log State'
-        })
-      );
-    }
-  }]);
-
-  return BennyEditor;
-}(_react2.default.Component);
-
-// Custom overrides for "code" style.
-
-
-var styleMap = {
-  CODE: {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-    fontSize: 16,
-    padding: 2
-  }
-};
-function getBlockStyle(block) {
-  switch (block.getType()) {
-    case 'blockquote':
-      return 'RichEditor-blockquote';
-    default:
-      return null;
-  }
-}
-//connect
-function mapStateToProps(state) {
-  return {};
-}
-var App = (0, _reactRedux.connect)(mapStateToProps)(BennyEditor);
-exports.default = App;
-
-/***/ }),
-
 /***/ "./client/containers/article/Edit.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2607,7 +2623,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__("./node_modules/react-redux/es/index.js");
 
-var _BennyEditor = __webpack_require__("./client/containers/article/BennyEditor.js");
+var _BennyEditor = __webpack_require__("./client/components/editor/BennyEditor.js");
 
 var _BennyEditor2 = _interopRequireDefault(_BennyEditor);
 
@@ -2620,18 +2636,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-//import DanteEditor from './DanteEditor.js'
-//import PluginsEditor from './PluginsEditor.jsx';
-
 
 //content
 var Edit = exports.Edit = function (_React$Component) {
   _inherits(Edit, _React$Component);
 
-  function Edit() {
+  function Edit(props) {
     _classCallCheck(this, Edit);
 
-    return _possibleConstructorReturn(this, (Edit.__proto__ || Object.getPrototypeOf(Edit)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Edit.__proto__ || Object.getPrototypeOf(Edit)).call(this, props));
+
+    _this.handleEditorUpdate = _this._handleEditorUpdate.bind(_this);
+    return _this;
   }
 
   _createClass(Edit, [{
@@ -2643,6 +2659,16 @@ var Edit = exports.Edit = function (_React$Component) {
 
       dispatch((0, _articleActions.editAndFetchArticleIfNeeded)(id));
       //dispatch(editArticle(id))
+    }
+
+    //editor
+
+  }, {
+    key: '_handleEditorUpdate',
+    value: function _handleEditorUpdate(data) {
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _articleActions.updateArticle)(data));
     }
   }, {
     key: 'render',
@@ -2685,7 +2711,7 @@ var Edit = exports.Edit = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'col-sm-12' },
-            _react2.default.createElement(_BennyEditor2.default, { id: article.id, content: articles[article.id].content })
+            _react2.default.createElement(_BennyEditor2.default, { id: article.id, content: articles[article.id].content, onEditorUpdate: this.handleEditorUpdate })
           )
         )
       );
@@ -2732,7 +2758,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__("./node_modules/react-redux/es/index.js");
 
-var _BennyEditor = __webpack_require__("./client/containers/article/BennyEditor.js");
+var _BennyEditor = __webpack_require__("./client/components/editor/BennyEditor.js");
 
 var _BennyEditor2 = _interopRequireDefault(_BennyEditor);
 
@@ -2750,10 +2776,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var New = exports.New = function (_React$Component) {
   _inherits(New, _React$Component);
 
-  function New() {
+  function New(props) {
     _classCallCheck(this, New);
 
-    return _possibleConstructorReturn(this, (New.__proto__ || Object.getPrototypeOf(New)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (New.__proto__ || Object.getPrototypeOf(New)).call(this, props));
+
+    _this.handleEditorUpdate = _this._handleEditorUpdate.bind(_this);
+    return _this;
   }
 
   _createClass(New, [{
@@ -2762,6 +2791,16 @@ var New = exports.New = function (_React$Component) {
       var dispatch = this.props.dispatch;
 
       dispatch((0, _articleActions.addArticle)());
+    }
+
+    //editor
+
+  }, {
+    key: '_handleEditorUpdate',
+    value: function _handleEditorUpdate(data) {
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _articleActions.updateArticle)(data));
     }
   }, {
     key: 'render',
@@ -2791,7 +2830,7 @@ var New = exports.New = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'col-sm-12' },
-            _react2.default.createElement(ArticleEditor, { id: article.id, content: articles[article.id].content })
+            _react2.default.createElement(_BennyEditor2.default, { id: article.id, content: articles[article.id].content, onEditorUpdate: this.handleEditorUpdate })
           )
         )
       );
@@ -2930,38 +2969,6 @@ function mapStateToProps(state) {
 }
 var App = (0, _reactRedux.connect)(mapStateToProps)(Show);
 exports.default = App;
-
-/***/ }),
-
-/***/ "./client/containers/article/rich_editor.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./client/containers/article/rich_editor.css");
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/style-loader/lib/addStyles.js")(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(true) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("./node_modules/css-loader/index.js!./client/containers/article/rich_editor.css", function() {
-			var newContent = __webpack_require__("./node_modules/css-loader/index.js!./client/containers/article/rich_editor.css");
-			if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ }),
 
@@ -6265,6 +6272,21 @@ module.exports = factory;
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./client/components/editor/editor.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".RichEditor-root {\n  background: #fff;\n  border: 1px solid #ddd;\n  font-family: 'Georgia', serif;\n  font-size: 14px;\n  padding: 15px;\n}\n\n.RichEditor-editor {\n  border-top: 1px solid #ddd;\n  cursor: text;\n  font-size: 16px;\n  margin-top: 10px;\n}\n\n.RichEditor-editor .public-DraftEditorPlaceholder-root,\n.RichEditor-editor .public-DraftEditor-content {\n  margin: 0 -15px -15px;\n  padding: 15px;\n}\n\n.RichEditor-editor .public-DraftEditor-content {\n  min-height: 100px;\n}\n\n.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {\n  display: none;\n}\n\n.RichEditor-editor .RichEditor-blockquote {\n  border-left: 5px solid #eee;\n  color: #666;\n  font-family: 'Hoefler Text', 'Georgia', serif;\n  font-style: italic;\n  margin: 16px 0;\n  padding: 10px 20px;\n}\n\n.RichEditor-editor .public-DraftStyleDefault-pre {\n  background-color: rgba(0, 0, 0, 0.05);\n  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;\n  font-size: 16px;\n  padding: 20px;\n}\n\n.RichEditor-controls {\n  font-family: 'Helvetica', sans-serif;\n  font-size: 14px;\n  margin-bottom: 5px;\n  user-select: none;\n}\n\n.RichEditor-styleButton {\n  color: #999;\n  cursor: pointer;\n  margin-right: 16px;\n  padding: 2px 0;\n  display: inline-block;\n}\n\n.RichEditor-activeButton {\n  color: #5890ff;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./client/components/home/home.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6334,21 +6356,6 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, ".navbar{\n\tbox-shadow: none;\n\tborder: none;\n\tbackground: #ffffff;\n}\n.navbar-brand {\n  -webkit-transition: all .3s;\n  -moz-transition: all .3s;\n  transition: all .3s;\n  padding-top: 20px;\n  padding-bottom: 20px;\n  height: 80px;\n}\n.navbar-brand img{\n  -webkit-transition: all .3s;\n  -moz-transition: all .3s;\n  transition: all .3s;\n  height: 35px;\n  width: 35px;\n}\n.navbar-nav li a{\n  -webkit-transition: all .3s;\n  -moz-transition: all .3s;\n  transition: all .3s;\n  font-size: 18px;\n}\n.navbar-nav > .active > a{\n\tbackground: none !important;\n\tbox-shadow: none !important;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./client/containers/article/rich_editor.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".RichEditor-root {\n  background: #fff;\n  border: 1px solid #ddd;\n  font-family: 'Georgia', serif;\n  font-size: 14px;\n  padding: 15px;\n}\n\n.RichEditor-editor {\n  border-top: 1px solid #ddd;\n  cursor: text;\n  font-size: 16px;\n  margin-top: 10px;\n}\n\n.RichEditor-editor .public-DraftEditorPlaceholder-root,\n.RichEditor-editor .public-DraftEditor-content {\n  margin: 0 -15px -15px;\n  padding: 15px;\n}\n\n.RichEditor-editor .public-DraftEditor-content {\n  min-height: 100px;\n}\n\n.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {\n  display: none;\n}\n\n.RichEditor-editor .RichEditor-blockquote {\n  border-left: 5px solid #eee;\n  color: #666;\n  font-family: 'Hoefler Text', 'Georgia', serif;\n  font-style: italic;\n  margin: 16px 0;\n  padding: 10px 20px;\n}\n\n.RichEditor-editor .public-DraftStyleDefault-pre {\n  background-color: rgba(0, 0, 0, 0.05);\n  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;\n  font-size: 16px;\n  padding: 20px;\n}\n\n.RichEditor-controls {\n  font-family: 'Helvetica', sans-serif;\n  font-size: 14px;\n  margin-bottom: 5px;\n  user-select: none;\n}\n\n.RichEditor-styleButton {\n  color: #999;\n  cursor: pointer;\n  margin-right: 16px;\n  padding: 2px 0;\n  display: inline-block;\n}\n\n.RichEditor-activeButton {\n  color: #5890ff;\n}\n", ""]);
 
 // exports
 

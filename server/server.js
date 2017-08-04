@@ -6,7 +6,7 @@ const favicon = require('serve-favicon');
 const db = require('./config/db');
 //controllers
 const articleController = require("./controllers/articleController");
-
+const mediaController = require("./controllers/mediaController");
 
 module.exports = {
   app: function () {
@@ -21,7 +21,8 @@ module.exports = {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(cookieParser());
-    app.use("/api", articleController);
+    app.use("/api/articles", articleController);
+    app.use("/api/media", mediaController);
     /*
     app.get("/*", function (req, res) {
       res.sendFile("index.html", {root: path.join(__dirname,"../public") })

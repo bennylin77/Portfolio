@@ -1,15 +1,27 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import BennyEditor from './BennyEditor.js';
+import BennyEditor from 'components/editor/BennyEditor.js';
 import {
-  addArticle
+  addArticle,
+  updateArticle
 } from 'actions/articleActions.js';
 //content
 export class New extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.handleEditorUpdate = this._handleEditorUpdate.bind(this);
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(addArticle())
+  }
+
+  //editor
+  _handleEditorUpdate(data){
+      const { dispatch } = this.props;
+      dispatch(updateArticle(data))
   }
 
   render() {
@@ -22,7 +34,7 @@ export class New extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <ArticleEditor id={article.id} content={articles[article.id].content} />
+            <BennyEditor id={article.id} content={articles[article.id].content} onEditorUpdate={this.handleEditorUpdate} />          
           </div>
         </div>
       </div>
