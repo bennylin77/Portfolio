@@ -23,7 +23,6 @@ class BennyEditor extends React.Component {
       },
     ]);
     //link
-
     if(props.content)
       this.state = {editorState: EditorState.createWithContent( convertFromRaw( JSON.parse(props.content) ), decorator ),
                     showLinkURLInput: false,//link
@@ -74,11 +73,10 @@ class BennyEditor extends React.Component {
   }
 
   _handleOnChange(editorState){
-    //const { dispatch, id } = this.props;
-    const { id, onEditorUpdate } = this.props;
+    const { onEditorUpdate } = this.props;
     this.setState({editorState});
     const rawdata = convertToRaw(this.state.editorState.getCurrentContent())
-    const data = { id: id, content: rawdata }
+    const data = rawdata
     //dispatch(updateArticle(data))
     onEditorUpdate(data);
   }
@@ -230,7 +228,7 @@ class BennyEditor extends React.Component {
 
 
   render() {
-    const { id, content } = this.props;
+    const { content } = this.props;
     const { editorState } = this.state;
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.

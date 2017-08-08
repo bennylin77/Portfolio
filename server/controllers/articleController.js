@@ -35,9 +35,14 @@ function add(req, res) {
   });
 }
 function update(req, res) {
-  const title = req.body.title;
-  const content = req.body.content;
-  Article.findOneAndUpdate({_id: req.id}, {$set: { title: title, content: JSON.stringify(content)}},
+  const set = {};
+  for (var field in req.body) {
+    if( field == 'content')
+      set[field] = JSON.stringify(req.body[field]);
+    else
+      set[field] = req.body[field];
+  }
+  Article.findOneAndUpdate({_id: req.id}, {$set: set},
                            {new: true}, function(err, article){
       if(err){
           console.log("Something wrong when updating data!");

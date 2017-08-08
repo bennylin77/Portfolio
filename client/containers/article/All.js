@@ -1,5 +1,7 @@
 import React from 'react';
 import Single from 'components/article/Single.js';
+import ArticleHead from 'components/article/ArticleHead.js';
+import ArticleList from 'components/article/ArticleList.js';
 import {
   fetchArticleList,
   deleteArticle
@@ -14,7 +16,6 @@ export class All extends React.Component {
      super(props);
      this.handleDeleteClick = this.handleDeleteClick.bind(this);
    }
-
   componentDidMount() {
     const { dispatch, selectedArticleTag } = this.props;
     dispatch(fetchArticleList(selectedArticleTag))
@@ -23,25 +24,21 @@ export class All extends React.Component {
     const { dispatch } = this.props;
     dispatch(deleteArticle(id));
   }
+  isFetched(){
 
+  }
   render() {
     const { articles, article_list } = this.props
 
-    if (!articles) {
+    if (!articles && !article_list) {
       return <h1><i>Loading</i></h1>
     }
 
     return (
-  		<div className="container" style={{"padding-top": "100px"}}>
-        {article_list.map( (id, i) =>
-          {
-            if(!articles[id])
-              return <div key={id}><i>Loading</i></div>
-            else
-              return <Single {...this.props} key={id} article={articles[id]} onDeleteClick={this.handleDeleteClick} />
-          })
-        }
-  		</div>
+  		<section>
+        <ArticleHead/>
+        <ArticleList articles={articles} articleList={article_list} onDeleteClick={this.handleDeleteClick} />
+  		</section>
     );
   }
 }

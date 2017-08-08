@@ -27,7 +27,7 @@ class Show extends React.Component {
 
 
     return (
-      <div className="container">
+      <div className="container" style={{"padding-top": "160px"}}>
         <div className="row">
           <div className="col-sm-12">{ articles[id].title }</div>
         </div>

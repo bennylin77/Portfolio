@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
-  const config = require('./webpack.deployment.config.js')
+  const config = require('./webpack.dev.js')
   const compiler = webpack(config)
 
   app.use(webpackHotMiddleware(compiler));
@@ -16,6 +16,8 @@ if (process.env.NODE_ENV !== 'production') {
     publicPath: config.output.publicPath
   }))
 }
+
+
 
 app.get("/*", function (req, res) {
   res.sendFile("index.html", {root: path.join(__dirname, "./public") })

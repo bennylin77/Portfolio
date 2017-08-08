@@ -11,6 +11,7 @@ export class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.handleEditorUpdate = this._handleEditorUpdate.bind(this);
+    this.handleInputChange = this._handleInputChange.bind(this);
   }
 
   componentDidMount() {
@@ -21,10 +22,20 @@ export class Edit extends React.Component {
     //dispatch(editArticle(id))
   }
 
+  _handleInputChange(event) {
+    const { dispatch, article} = this.props;
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    const data = { id: article.id, [name]: value };
+    dispatch(updateArticle(data));
+  }
+
   //editor
-  _handleEditorUpdate(data){
-      const { dispatch } = this.props;
-      dispatch(updateArticle(data))
+  _handleEditorUpdate(content){
+    const { dispatch, articles, article} = this.props;
+    const data = { id: article.id, title: articles[article.id].title, content: content };
+    dispatch(updateArticle(data));
   }
 
   render() {
@@ -37,12 +48,17 @@ export class Edit extends React.Component {
     if (article.id != this.props.match.params.id){
       return <h1><i>Loading</i></h1>
     }
-
+    //console.log(articles[article.id].title)
     return (
-      <div className="container" style={{"padding-top": "100px"}}>
+      <div className="container" style={{"padding-top": "160px"}}>
         <div className="row">
           <div className="col-sm-12">
-            <BennyEditor id={article.id} content={articles[article.id].content} onEditorUpdate={this.handleEditorUpdate} />
+            <input type="text" name="title" value={ !articles[article.id].title ? "": articles[article.id].title } onChange={this.handleInputChange} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <BennyEditor content={articles[article.id].content} onEditorUpdate={this.handleEditorUpdate} />
           </div>
         </div>
       </div>

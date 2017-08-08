@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import './styles/single.css';
 
 export class Single extends React.Component {
 
@@ -16,18 +17,18 @@ export class Single extends React.Component {
     const {article} = this.props;
 
     return (
-      <div className="row article_single">
-        <div className="col-sm-12">
+      <Row className="show-grid">
+        <Col xs={12} className="">
           <Link to={`/article/${article.id}`}>
-            {article.id}: {article.title}
+            {article.title}
           </Link>
           <Link to={`/article/${article.id}/edit`}>Edit_
           </Link>
           <button className="article_single_delete" onClick={this.handleClick}>
             Delete_
           </button>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }
