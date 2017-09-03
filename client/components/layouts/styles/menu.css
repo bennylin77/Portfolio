@@ -28,3 +28,62 @@
 	background: none !important;
 	box-shadow: none !important;
 }
+
+/* nav shrink */
+
+.navbar-shrink{	
+  border-bottom: 1px solid #e7e7e7;;
+}
+.navbar-shrink .navbar-brand {
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  float: left;
+  padding: 15px 15px;
+  line-height: 20px;
+  height: 50px;
+}
+.navbar-shrink .navbar-brand img{
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  width: 30px;
+  height: 30px;
+}
+.navbar-shrink .nav-link{
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.navbar-shrink .nav-img{
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  padding-top: 14.5px;
+}
+.navbar-shrink .navbar-nav li a{
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  transition: all .3s;
+  font-size: 14px;
+}
+
+
+/* navbar toggle */
+.navbar-toggle{
+}
+.navbar-default .navbar-toggle,
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border: none;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus{
+	background: none;
+}
+.navbar-default .navbar-toggle,
+.navbar-default{
+	background: #ffffff;
+}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import './styles/article_list.css';
+import moment from 'moment';
+import './styles/article.css';
 
 const ArticleList = (props) => {
     return (
@@ -13,23 +14,28 @@ const ArticleList = (props) => {
       </Grid>
     )
 };
+
 const ListItem = (props) => {
   const { article,  onDeleteClick} = props
   function handleClick(e) {
     e.preventDefault();
     onDeleteClick(article.id)
   }
+  const createdAt = moment(article.createdAt);
   return (
-    <Row className="show-grid">
+    <Row className="show-grid article_list_item_holder">
       <Col xs={12} className="">
         <Link to={`/article/${article.id}`}>
-          {article.title}
+          <div className="article_list_item_title">{ article.title}</div>
+          <div>{ createdAt.format("MMM Do YYYY") }</div>
         </Link>
+
         <Link to={`/article/${article.id}/edit`}>Edit_
         </Link>
         <button className="article_single_delete" onClick={handleClick}>
           Delete_
         </button>
+        
       </Col>
     </Row>
   )

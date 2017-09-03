@@ -50,7 +50,7 @@ export class Edit extends React.Component {
     }
     //console.log(articles[article.id].title)
     return (
-      <div className="container" style={{"padding-top": "160px"}}>
+      <div className="container" style={{padding: '100px'}}>
         <div className="row">
           <div className="col-sm-12">
             <input type="text" name="title" value={ !articles[article.id].title ? "": articles[article.id].title } onChange={this.handleInputChange} />

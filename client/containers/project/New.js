@@ -1,10 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import Form from 'components/project/Form.js';
 import BennyEditor from 'components/editor/BennyEditor.js';
 import {
-  addArticle,
-  updateArticle
-} from 'actions/articleActions.js';
+  addProject,
+  updateProject
+} from 'actions/projectActions.js';
 //content
 export class New extends React.Component {
 
@@ -12,32 +13,38 @@ export class New extends React.Component {
     super(props);
     this.handleEditorUpdate = this._handleEditorUpdate.bind(this);
     this.handleInputChange = this._handleInputChange.bind(this);
+    this.handleStartedAtChange = this._handleStartedAtChange.bind(this);
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(addArticle())
+    dispatch(addProject())
   }
 
-  _handleInputChange(event) {
-    const { dispatch, article} = this.props;
-    const target = event.target;
+  _handleInputChange(target) {
+    const { dispatch, project} = this.props;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    const data = { id: article.id, [name]: value };
-    dispatch(updateArticle(data));
+    const data = { id: project.id, [name]: value };
+    dispatch(updateProject(data));
+  }
+
+  _handleStartedAtChange(value) {
+    const { dispatch, project} = this.props;
+    const data = { id: project.id, startedAt: value };
+    dispatch(updateProject(data));
   }
 
   //editor
   _handleEditorUpdate(content){
-      const { dispatch, articles, article } = this.props;
-      const data = { id: article.id, title: articles[article.id].title, content: content };
-      dispatch(updateArticle(data))
+    const { dispatch, projects, project } = this.props;
+    const data = { id: project.id, title: projects[project.id].title, content: content };
+    dispatch(updateProject(data))
   }
 
   render() {
-    const { article, articles } = this.props;
-    if (!articles || !article) {
+    const { project, projects } = this.props;
+    if (!projects || !project) {
       return <h1><i>Loading</i></h1>
     }
 
@@ -55,11 +62,11 @@ export class New extends React.Component {
 //connect
 function mapStateToProps(state) {
   const { entities, editing} = state
-  const { article } = editing
-  const { articles } = entities
+  const { project } = editing
+  const { projects } = entities
   return {
-    article,
-    articles
+    project,
+    projects
   }
 }
 const App = connect(mapStateToProps)(New);

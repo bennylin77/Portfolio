@@ -6,6 +6,7 @@ const favicon = require('serve-favicon');
 const db = require('./config/db');
 //controllers
 const articleController = require("./controllers/articleController");
+const projectController = require("./controllers/projectController");
 const mediaController = require("./controllers/mediaController");
 
 module.exports = {
@@ -22,6 +23,7 @@ module.exports = {
     app.use(bodyParser.json());
     app.use(cookieParser());
     app.use("/api/articles", articleController);
+    app.use("/api/projects", projectController);
     app.use("/api/media", mediaController);
     /*
     app.get("/*", function (req, res) {

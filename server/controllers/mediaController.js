@@ -12,7 +12,7 @@ router.post('/add', upload.single('media'), add);
 router.route("/:id").get(single).delete(destroy);
 
 function all(req, res) {
-  Media.find( {}, 'id', function (err, media) {
+  Media.find( {}, 'id destination filename', function (err, media) {
       if (err)
           res.send(err);
       else

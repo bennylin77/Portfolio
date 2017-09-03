@@ -1,13 +1,12 @@
 import React from 'react';
-import Single from 'components/article/Single.js';
-import ArticleHead from 'components/article/ArticleHead.js';
-import ArticleList from 'components/article/ArticleList.js';
+import Head from 'components/article/Head.js';
+import List from 'components/article/List.js';
 import {
   fetchArticleList,
   deleteArticle
 } from 'actions/articleActions.js';
 import { connect } from 'react-redux';
-
+import {Helmet} from "react-helmet";
 
 //content
 export class All extends React.Component {
@@ -15,6 +14,7 @@ export class All extends React.Component {
   constructor(props) {
      super(props);
      this.handleDeleteClick = this.handleDeleteClick.bind(this);
+     this.isNotFetched = this.isNotFetched.bind(this);
    }
   componentDidMount() {
     const { dispatch, selectedArticleTag } = this.props;
@@ -24,20 +24,27 @@ export class All extends React.Component {
     const { dispatch } = this.props;
     dispatch(deleteArticle(id));
   }
-  isFetched(){
 
+  isNotFetched(){
+    const { articles, article_list } = this.props
+    return (!articles && !article_list) ? true : false;
   }
+
+
   render() {
     const { articles, article_list } = this.props
 
-    if (!articles && !article_list) {
-      return <h1><i>Loading</i></h1>
+    if (this.isNotFetched()) {
+      return <h4><i>Loading</i></h4>
     }
-
     return (
   		<section>
-        <ArticleHead/>
-        <ArticleList articles={articles} articleList={article_list} onDeleteClick={this.handleDeleteClick} />
+        <Helmet>
+            <title>Chi Lin_ Article</title>
+            <meta name="description" content="" />
+        </Helmet>
+        <Head/>
+        <List articles={articles} articleList={article_list} onDeleteClick={this.handleDeleteClick} />
   		</section>
     );
   }

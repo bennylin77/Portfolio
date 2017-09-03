@@ -1,12 +1,12 @@
 import React from 'react';
+import Head from 'components/show/Head.js';
+import Content from 'components/show/Content.js';
 import {connect} from 'react-redux';
 import {
   fetchArticleIfNeeded
 } from 'actions/articleActions.js';
+import {Helmet} from "react-helmet";
 
-import {convertFromRaw} from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
-import DOMPurify from 'dompurify';
 //content
 class Show extends React.Component {
 
@@ -23,10 +23,25 @@ class Show extends React.Component {
       return <h1><i>Loading</i></h1>
     }
 
-    const content =  articles[id].content? stateToHTML(convertFromRaw( JSON.parse(articles[id].content))) : "no content"
+    //const content =  articles[id].content? stateToHTML(convertFromRaw( JSON.parse(articles[id].content))) : "no content"
 
 
     return (
+      <section>
+        <Helmet>
+          {articles[id].title && <title>Chi Lin_ {articles[id].title}</title>}            
+          <meta name="description" content="" />
+        </Helmet>
+        <Head item={articles[id]}/>
+        <Content item={articles[id]}/>
+  		</section>
+    );
+  }
+}
+
+
+
+/*
       <div className="container" style={{"padding-top": "160px"}}>
         <div className="row">
           <div className="col-sm-12">{ articles[id].title }</div>
@@ -35,10 +50,7 @@ class Show extends React.Component {
           <div className="col-sm-12" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(content) }}></div>
         </div>
       </div>
-    );
-  }
-}
-
+*/
 //connect
 function mapStateToProps(state) {
   const { entities } = state

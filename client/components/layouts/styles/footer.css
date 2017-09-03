@@ -1,6 +1,6 @@
 /*======== contact ==========*/
 .footer_holder{
-	font-size: 17px;
+	font-size: 16px;
 	width: 100%;
 }
 .footer_link_holder{
@@ -30,12 +30,13 @@
   text-decoration: none;
   color: #6d6d6d;
 }
-.footer_contact_type{
+.footer_contact_strong{
 	color: #6d6d6d;
 }
 .footer_contact_type_holder{
-	margin-bottom: 10px;
+	text-align: center;
 }
+/*
 .footer_contact_type_holder_left,
 .footer_contact_type_holder_right{
   text-align: center;
@@ -47,4 +48,10 @@
   .footer_contact_type_holder_right{
     text-align: left;
   }
+}
+*/
+.footer_copy_right_holder{
+	text-align: center;
+	font-size: 12px;
+	margin-top: 20px;
 }

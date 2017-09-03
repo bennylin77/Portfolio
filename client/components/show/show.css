@@ -1,0 +1,21 @@
+.head_holder{
+  padding-top: 100px;
+  margin-bottom: 40px;
+}
+.head_holder h2{
+  margin-bottom: 20px;
+}
+.head_created_at{
+
+}
+.head_updated_at{
+
+}
+.content_holder{
+  margin-bottom: 100px;  
+  font-family: Georgia, 'Microsoft JhengHei', sans-serif;
+  font-size: 16px;
+}
+.content_holder img{
+  width: 100%;
+}

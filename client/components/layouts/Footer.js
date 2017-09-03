@@ -21,8 +21,16 @@ function Footer(props) {
 			</div>
       <Grid>
         <Row className="show-grid footer_contact_type_holder">
-          <Col xs={12} sm={6} className="footer_contact_type_holder_left"><strong className="footer_contact_type">Email</strong> bennylin77@gmail.com</Col>
-          <Col xs={12} sm={6} className="footer_contact_type_holder_right"><strong className="footer_contact_type">Mobile</strong> +886939383847</Col>
+          <Col sm={12} className="">bennylin77@gmail.com</Col>
+        </Row>
+        <Row className="show-grid footer_contact_type_holder">
+          <Col sm={12} className="">
+            <strong className="footer_contact_strong"> US </strong>+1-5129159309
+            <strong className="footer_contact_strong"> TW </strong>+886-939383847
+          </Col>
+        </Row>
+        <Row className="show-grid footer_copy_right_holder">
+          <Col sm={12} className="">Copyright © Gene CHI LIN 林 起. All rights reserved. Powered by CHI LIN</Col>
         </Row>
       </Grid>
     </footer>
