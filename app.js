@@ -4,7 +4,7 @@ const port = (process.env.PORT || 8080)
 const app = Server.app();
 const reactHelmet = require("react-helmet");
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'prod') {
   const webpack = require('webpack')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
