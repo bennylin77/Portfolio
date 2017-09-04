@@ -36,22 +36,11 @@
 .footer_contact_type_holder{
 	text-align: center;
 }
-/*
-.footer_contact_type_holder_left,
-.footer_contact_type_holder_right{
-  text-align: center;
+.footer_divider_holder{
+	text-align: center;
 }
-@media (min-width: 768px) {
-  .footer_contact_type_holder_left{
-  	text-align: right;
-  }
-  .footer_contact_type_holder_right{
-    text-align: left;
-  }
-}
-*/
 .footer_copy_right_holder{
 	text-align: center;
 	font-size: 12px;
-	margin-top: 20px;
+	margin-top: 10px;
 }

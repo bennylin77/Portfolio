@@ -168,6 +168,9 @@
 .timeline-controller{
   display: none;
 }
+.timeline-controller a{
+  color: #333;
+}
 .timeline-controller button{
   color: #c7254e;
 }

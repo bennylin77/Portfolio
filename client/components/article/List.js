@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import './styles/article.css';
@@ -29,13 +29,13 @@ const ListItem = (props) => {
           <div className="article_list_item_title">{ article.title}</div>
           <div>{ createdAt.format("MMM Do YYYY") }</div>
         </Link>
-
-        <Link to={`/article/${article.id}/edit`}>Edit_
-        </Link>
-        <button className="article_single_delete" onClick={handleClick}>
-          Delete_
-        </button>
-        
+        <div className="article_list_item_control_holder">
+          <Link to={`/article/${article.id}/edit`}>Edit_
+          </Link>
+          <Button bsStyle="link" className="article_single_delete" onClick={handleClick}>
+            Delete_
+          </Button>
+        </div>
       </Col>
     </Row>
   )

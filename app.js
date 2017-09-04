@@ -4,7 +4,7 @@ const port = (process.env.PORT || 8080)
 const app = Server.app();
 const reactHelmet = require("react-helmet");
 
-if (process.env.NODE_ENV !== 'prod') {
+if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -17,7 +17,6 @@ if (process.env.NODE_ENV !== 'prod') {
     publicPath: config.output.publicPath
   }))
 }
-
 
 
 app.get("/*", function (req, res) {

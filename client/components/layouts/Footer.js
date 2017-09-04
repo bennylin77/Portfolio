@@ -25,8 +25,13 @@ function Footer(props) {
         </Row>
         <Row className="show-grid footer_contact_type_holder">
           <Col sm={12} className="">
-            <strong className="footer_contact_strong"> US </strong>+1-5129159309
+            <strong className="footer_contact_strong"> US </strong>+1-512-9159309
             <strong className="footer_contact_strong"> TW </strong>+886-939383847
+          </Col>
+        </Row>
+        <Row className="show-grid footer_divider_holder">
+          <Col sm={12} className="">
+            -
           </Col>
         </Row>
         <Row className="show-grid footer_copy_right_holder">

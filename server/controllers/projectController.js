@@ -13,7 +13,7 @@ function all(req, res) {
           res.send(err);
       else
           res.json(projects);
-  });
+  }).sort({startedAt: 'desc'});
 }
 function single(req, res) {
   Project.findById(req.id, function (err, project) {
