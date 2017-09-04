@@ -166,7 +166,7 @@
   text-decoration: none;
 }
 .timeline-controller{
-  display: none;
+  /*display: none;*/
 }
 .timeline-controller a{
   color: #333;

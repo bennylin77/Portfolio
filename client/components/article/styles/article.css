@@ -22,7 +22,7 @@
 }
 
 .article_list_item_control_holder{
-  display: none;
+  /*display: none;*/
 }
 .article_list_item_control_holder a{
   text-decoration: underline;
