@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import BennyEditor from 'components/editor/BennyEditor.js';
+import Form from 'components/article/Form.js';
 import {
   editAndFetchArticleIfNeeded,
   updateArticle
@@ -22,9 +22,8 @@ export class Edit extends React.Component {
     //dispatch(editArticle(id))
   }
 
-  _handleInputChange(event) {
+  _handleInputChange(target) {
     const { dispatch, article} = this.props;
-    const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
     const data = { id: article.id, [name]: value };
@@ -44,24 +43,18 @@ export class Edit extends React.Component {
     if (!articles || !article) {
       return <h1><i>Loading</i></h1>
     }
-
     if (article.id != this.props.match.params.id){
       return <h1><i>Loading</i></h1>
     }
     //console.log(articles[article.id].title)
     return (
-      <div className="container" style={{padding: '100px'}}>
-        <div className="row">
-          <div className="col-sm-12">
-            <input type="text" name="title" value={ !articles[article.id].title ? "": articles[article.id].title } onChange={this.handleInputChange} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-12">
-            <BennyEditor content={articles[article.id].content} onEditorUpdate={this.handleEditorUpdate} />
-          </div>
-        </div>
-      </div>
+      <section>
+        <Form onStartedAtChange={this.handleStartedAtChange}
+              onInputChange={this.handleInputChange}
+              article={articles[article.id]}
+              editorContent={articles[article.id].content}
+              onEditorUpdate={this.handleEditorUpdate}/>
+      </section>
     );
   }
 }

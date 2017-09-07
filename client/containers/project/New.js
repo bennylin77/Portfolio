@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Form from 'components/project/Form.js';
-import BennyEditor from 'components/editor/BennyEditor.js';
 import {
   addProject,
   updateProject

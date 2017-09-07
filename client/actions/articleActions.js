@@ -1,6 +1,6 @@
 //import fetch from 'isomorphic-fetch'
 const port = (process.env.PORT || 8080)
-
+const domain = "http://www.chi-lin.com"
 export const SELECT_ARTICLE_LIST = 'SELECT_ARTICLE_LIST'
 export const EDIT_ARTICLE = 'EDIT_ARTICLE'
 export const REQUEST_ARTICLE = 'REQUEST_ARTICLE'
@@ -75,7 +75,7 @@ export function editAndFetchArticleIfNeeded(id) {
 function fetchArticle(id){
   return (dispatch, getState) => {
     dispatch( requestArticle(id) )
-    return fetch(`http://www.chi-lin.com:${port}/api/articles/${id}`)
+    return fetch(`${domain}:${port}/api/articles/${id}`)
       .then(response => response.json())
       .then(result => dispatch(receiveArticle(id, result)))
   }
@@ -83,7 +83,7 @@ function fetchArticle(id){
 //add
 export function addArticle(){
   return (dispatch, getState) => {
-    return fetch(`http://www.chi-lin.com:${port}/api/articles/add`)
+    return fetch(`${domain}:${port}/api/articles/add`)
       .then(response => response.json())
       .then(result => { dispatch(receiveArticle(result.id)); return result })
       .then(result => dispatch(editArticle(result.id)))
@@ -92,7 +92,7 @@ export function addArticle(){
 //update
 export function updateArticle(data){
   return (dispatch, getState) => {
-    return fetch(`http://www.chi-lin.com:${port}/api/articles/${data.id}`,
+    return fetch(`${domain}:${port}/api/articles/${data.id}`,
            { method: 'PUT',
              headers: {
                'Accept': 'application/json, text/plain, */*',
@@ -106,7 +106,7 @@ export function updateArticle(data){
 //delete
 export function deleteArticle(id){
   return (dispatch, getState) => {
-    return fetch(`http://www.chi-lin.com:${port}/api/articles/${id}`, { method: 'DELETE' })
+    return fetch(`${domain}:${port}/api/articles/${id}`, { method: 'DELETE' })
       .then(response => response.json())
       .then(result => dispatch(removeArticle(result.item.id)) )
   }
@@ -130,7 +130,7 @@ function receiveArticleList(tag, result) {
 export function fetchArticleList(tag){
   return (dispatch, getState) => {
     dispatch( requestArticleList(tag) )
-    return fetch(`http://www.chi-lin.com:${port}/api/articles`)
+    return fetch(`${domain}:${port}/api/articles`)
       .then(response => response.json())
       .then(result => dispatch(receiveArticleList(tag, result)))
       .then( () => {

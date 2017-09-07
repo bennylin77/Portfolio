@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import BennyEditor from 'components/editor/BennyEditor.js';
+import Form from 'components/article/Form.js';
 import {
   addArticle,
   updateArticle
@@ -19,9 +19,8 @@ export class New extends React.Component {
     dispatch(addArticle())
   }
 
-  _handleInputChange(event) {
+  _handleInputChange(target) {
     const { dispatch, article} = this.props;
-    const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
     const data = { id: article.id, [name]: value };
@@ -45,8 +44,8 @@ export class New extends React.Component {
       <section>
         <Form onStartedAtChange={this.handleStartedAtChange}
               onInputChange={this.handleInputChange}
-              project={projects[project.id]}
-              editorContent={projects[project.id].content}
+              article={articles[article.id]}
+              editorContent={articles[article.id].content}
               onEditorUpdate={this.handleEditorUpdate}/>
       </section>
     );

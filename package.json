@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build:dev": "webpack --env=dev --config ./webpack.dev.js --progress --profile --colors",
+    "build:dev": "webpack --env=dev --config ./webpack.dev.js --progress",
     "build:prod": "webpack --env=prod --config ./webpack.prod.js --progress --profile --colors"
   },
   "repository": {
