@@ -3,4 +3,4 @@
 2. npm install
 3. npm build:dev
 4. node app.js
-5. browse your server port 8081 via browser, the index page will show up
+5. GO to your server port 8081 via browser. You will see the index page.
