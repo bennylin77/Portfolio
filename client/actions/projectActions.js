@@ -1,6 +1,7 @@
 //import fetch from 'isomorphic-fetch'
-const port = (process.env.PORT || 8080)
-const domain = "http://www.chi-lin.com"
+const port = process.env.PORT
+const domain = process.env.DOMAIN
+const host = process.env.NODE_ENV == 'production'? `${domain}` : `${domain}:${port}`
 export const SELECT_PROJECT_LIST = 'SELECT_PROJECT_LIST'
 export const EDIT_PROJECT = 'EDIT_PROJECT'
 export const REQUEST_PROJECT = 'REQUEST_PROJECT'
@@ -75,7 +76,7 @@ export function editAndFetchProjectIfNeeded(id) {
 function fetchProject(id){
   return (dispatch, getState) => {
     dispatch( requestProject(id) )
-    return fetch(`${domain}:${port}/api/projects/${id}`)
+    return fetch(`${host}/api/projects/${id}`)
       .then(response => response.json())
       .then(result => dispatch(receiveProject(id, result)))
   }
@@ -83,7 +84,7 @@ function fetchProject(id){
 //add
 export function addProject(){
   return (dispatch, getState) => {
-    return fetch(`${domain}:${port}/api/projects/add`)
+    return fetch(`${host}/api/projects/add`)
       .then(response => response.json())
       .then(result => { dispatch(receiveProject(result.id)); return result })
       .then(result => dispatch(editProject(result.id)))
@@ -92,7 +93,7 @@ export function addProject(){
 //update
 export function updateProject(data){
   return (dispatch, getState) => {
-    return fetch(`${domain}:${port}/api/projects/${data.id}`,
+    return fetch(`${host}/api/projects/${data.id}`,
            { method: 'PUT',
              headers: {
                'Accept': 'application/json, text/plain, */*',
@@ -106,7 +107,7 @@ export function updateProject(data){
 //delete
 export function deleteProject(id){
   return (dispatch, getState) => {
-    return fetch(`${domain}:${port}/api/projects/${id}`, { method: 'DELETE' })
+    return fetch(`${host}/api/projects/${id}`, { method: 'DELETE' })
       .then(response => response.json())
       .then(result => dispatch(removeProject(result.item.id)) )
   }
@@ -130,7 +131,7 @@ function receiveProjectList(tag, result) {
 export function fetchProjectList(tag){
   return (dispatch, getState) => {
     dispatch( requestProjectList(tag) )
-    return fetch(`${domain}:${port}/api/projects`)
+    return fetch(`${host}/api/projects`)
       .then(response => response.json())
       .then(result => dispatch(receiveProjectList(tag, result)))
       .then( () => {

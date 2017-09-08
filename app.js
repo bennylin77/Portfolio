@@ -1,8 +1,22 @@
 const path = require("path");
 const Server = require('./server/server.js')
-const port = (process.env.PORT || 8080)
+const port = (process.env.PORT || 8081)
 const app = Server.app();
 const reactHelmet = require("react-helmet");
+
+function wwwRedirect(req, res, next) {
+    /*if (req.headers.host.slice(0, 4) === 'www.') {
+        var newHost = req.headers.host.slice(4);
+        return res.redirect(301, req.protocol + '://' + newHost + req.originalUrl);
+    }*/
+    if (!req.headers.host.match(/^www\..*/i)) {
+      return res.redirect(301, req.protocol + '://www.' + req.headers.host + req.originalUrl);
+    }
+    next();
+};
+app.set('trust proxy', true);
+app.use(wwwRedirect);
+
 
 if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack')
@@ -10,7 +24,6 @@ if (process.env.NODE_ENV !== 'production') {
   const webpackHotMiddleware = require('webpack-hot-middleware')
   const config = require('./webpack.dev.js')
   const compiler = webpack(config)
-
   app.use(webpackHotMiddleware(compiler));
   app.use(webpackDevMiddleware(compiler, {
     noInfo: true,

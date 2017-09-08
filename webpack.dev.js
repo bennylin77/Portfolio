@@ -11,6 +11,13 @@ module.exports = merge({
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.NamedModulesPlugin()
+    new webpack.NamedModulesPlugin(),
+    new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify('development'),
+          'DOMAIN': JSON.stringify('http://www.chi-lin.com'),          
+          'PORT': JSON.stringify('8081')
+      }
+    })
   ]
 }, common );
