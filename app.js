@@ -61,7 +61,7 @@ app.get("/*", function (req, res) {
           </head>
           <body ${helmet.bodyAttributes.toString()}>
             <div id="root"></div>
-            <script src="/public/bundle.js"></script>
+            <script src="/bundle.js"></script>
           </body>
       </html>
   `;
