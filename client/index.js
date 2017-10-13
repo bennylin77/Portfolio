@@ -23,12 +23,11 @@ ReactDOM.render( router(Layout, store, history), document.getElementById('root')
 if (module.hot) {
   module.hot.accept('components/layouts/Layout.js', () => {
 
-    const NextLayout = require('components/layouts/Layout.js').default;
+    const nextLayout = require('components/layouts/Layout.js').default;
     const newConfigureStore = require('./store.js');
     const newStore = newConfigureStore.store;
     const newHistory = newConfigureStore.history;
 
-
-    ReactDOM.render( router(NextLayout, newStore, newHistory), document.getElementById('root'));
+    ReactDOM.render( router(nextLayout, newStore, newHistory), document.getElementById('root'));
   });
 }

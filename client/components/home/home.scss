@@ -1,0 +1,128 @@
+.home_holder{
+}
+.home_introduce_holder{
+	position: relative;
+  padding-top: 35vh;
+  height: 100vh;
+}
+.introduce_typist {
+  font-size: 21px;
+  color: #6d6d6d;
+}
+.Typist .Cursor {
+  display: inline-block;
+}
+.Typist .Cursor--blinking {
+  opacity: 1;
+  animation: blink 1s linear infinite;
+}
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (min-width: 560px) {
+  .home_introduce_holder{
+    padding-top: 40vh;
+  }
+  .introduce_typist {
+    font-size: 35px;
+  }
+}
+@media (min-width: 768px) {
+  .home_introduce_holder{
+    padding-top: 30vh;
+  }
+  .introduce_typist {
+    font-size: 40px;
+  }
+}
+@media (min-width: 992px) {
+  .introduce_typist {
+    font-size: 50px;
+  }
+}
+
+
+.arrow_down, .arrow_down:before{
+  position: absolute;
+  left: 50%;
+}
+
+
+
+.arrow_down{
+	transition-delay: .5s;
+	transition: 10s;
+	transition-timing-function: ease;
+	cursor: pointer;
+  width: 40px;
+  height: 40px;
+  top: 90%;
+  margin: -20px 0 0 -20px;
+  -webkit-transform: rotate(45deg);
+  border-left: none;
+  border-top: none;
+  border-right: 2px #6d6d6d solid;
+  border-bottom: 2px #6d6d6d solid;
+}
+.arrow_down:before{
+  content: '';
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  margin: -10px 0 0 -10px;
+  border-left: none;
+  border-top: none;
+  border-right: 1px #6d6d6d solid;
+  border-bottom: 1px #6d6d6d solid;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-name: arrow_down;
+}
+
+@keyframes arrow_down{
+  0%{
+    opacity: 1;
+	}
+  100%{
+    opacity: 0;
+    transform: translate(-10px, -10px)
+	}
+}
+
+
+
+.home_mid_holder{
+  padding-top: 10vh;
+	padding-bottom: 10vh;
+  min-height: 80vh;
+}
+.home_mid_holder a{
+	text-decoration: none;
+}
+.home_mid_holder a:hover{
+	font-style: italic;
+}
+
+.home_mid_holder_intro{
+	font-size: 28px;
+  color: #6d6d6d;
+	margin: 0 auto;
+	width: 60%;
+	padding-top: 15vh;
+}
+.home_mid_holder_intro_prject{
+}
+.home_mid_holder_left{
+	color: #ffffff;
+}
+.home_mid_holder_intro_right{
+
+}
+
+
+.home_footer {
+    margin-bottom: 100px;
+    border-bottom: 1px solid #eeeeee;
+}

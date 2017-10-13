@@ -8,19 +8,20 @@ router.get('/add', add);
 router.route("/:id").get(single).put(update).delete(destroy);
 
 function all(req, res) {
-  Project.find( {}, 'id',function (err, projects) {
+  Project.find( {}, 'id').sort('-startedAt').exec(function (err, projects) {
+		console.log(projects)
       if (err)
           res.send(err);
       else
           res.json(projects);
-  }).sort({startedAt: 'desc'});
+  });
 }
 function single(req, res) {
   Project.findById(req.id, function (err, project) {
     if (err) {
       console.log('GET Error: There was a problem retrieving: ' + err);
     } else {
-      console.log('GET Retrieving ID: ' + project._id);
+      //console.log('GET Retrieving ID: ' + project._id);
       res.json(project);
     }
   });

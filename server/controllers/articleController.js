@@ -8,7 +8,7 @@ router.get('/add', add);
 router.route("/:id").get(single).put(update).delete(destroy);
 
 function all(req, res) {
-  Article.find( {}, 'id',function (err, articles) {
+  Article.find( {}, 'id').sort({createdAt: -1}).exec(function (err, articles) {
       if (err)
           res.send(err);
       else

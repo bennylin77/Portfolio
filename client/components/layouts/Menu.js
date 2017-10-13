@@ -20,7 +20,7 @@ class Menu extends React.Component {
 
   render() {
     return (
-      <Navbar fixedTop collapseOnSelect fluid className={this.state.isShrink ? 'navbar-shrink' : ''}>
+      <Navbar fixedTop collapseOnSelect className={this.state.isShrink ? 'navbar-shrink' : ''}>
         <Navbar.Header>
           <Navbar.Brand>
             <Link to='/'>

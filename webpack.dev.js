@@ -5,8 +5,8 @@ const webpack = require('webpack');
 
 module.exports = merge({
   entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client',
+		'react-hot-loader/patch',
+		'webpack-hot-middleware/client',
   ],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -15,7 +15,7 @@ module.exports = merge({
     new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': JSON.stringify('development'),
-          'DOMAIN': JSON.stringify('http://www.chi-lin.com'),          
+          'DOMAIN': JSON.stringify('http://www.chi-lin.com'),
           'PORT': JSON.stringify('8081')
       }
     })

@@ -35,7 +35,7 @@ function Footer(props) {
           </Col>
         </Row>
         <Row className="show-grid footer_copy_right_holder">
-          <Col sm={12} className="">Copyright © Gene CHI LIN 林 起. All rights reserved. Powered by CHI LIN</Col>
+          <Col sm={12} className="">Copyright © CHI LIN 林 起. All rights reserved. Powered by CHI LIN</Col>
         </Row>
       </Grid>
     </footer>
