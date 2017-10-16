@@ -90,7 +90,7 @@ class Home extends React.Component {
 									this.handlePositionChange(previousPosition, currentPosition) }}>
 							</Waypoint>
 	            <Col sm={6} smOffset={0}>
-								<Link to='/project'>
+								<Link to='/article'>
 					        <Transition in={this.state.in} timeout={duration}>
 					          {(state) => (
 					            <div style={{ ...leftDefaultStyle, ...leftTransitionStyles[state] }}>
@@ -108,7 +108,7 @@ class Home extends React.Component {
 								</Link>
 	            </Col>
 							<Col sm={6} smOffset={0}>
-								<Link to='/article'>
+								<Link to='/project'>
 				        <Transition in={this.state.in} timeout={duration}>
 				          {(state) => (
 				            <div style={{ ...rightDefaultStyle, ...rightTransitionStyles[state] }}>
