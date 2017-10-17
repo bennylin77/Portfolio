@@ -41,7 +41,7 @@ class Home extends React.Component {
 		const duration = 3500;
     const leftDefaultStyle = {
 			height: '50vh',
-			width: '0%',
+			width: '50%',
 			color: '#f9f9f9',
 			background: '#8E8E8E',
       transition: `all ${duration}ms ease`,
@@ -49,7 +49,7 @@ class Home extends React.Component {
 			marginTop: '50px'
     }
 		const rightDefaultStyle = {
-			height: '0vh',
+			height: '25vh',
 			width: '100%',
 			background: '#F8F8F8',
       transition: `all ${duration}ms ease`,
@@ -94,7 +94,7 @@ class Home extends React.Component {
 					        <Transition in={this.state.in} timeout={duration}>
 					          {(state) => (
 					            <div style={{ ...leftDefaultStyle, ...leftTransitionStyles[state] }}>
-												<div className="home_mid_holder_intro home_mid_holder_left">
+												<div className="home_mid_holder_intro home_mid_holder_intro_left">
 													<Typist onTypingDone={this.handleTypingDone} cursor={cursor}>
 													Learn<br/>
 													the<br/>
@@ -112,7 +112,7 @@ class Home extends React.Component {
 				        <Transition in={this.state.in} timeout={duration}>
 				          {(state) => (
 				            <div style={{ ...rightDefaultStyle, ...rightTransitionStyles[state] }}>
-											<div className="home_mid_holder_intro home_mid_holder_right">
+											<div className="home_mid_holder_intro home_mid_holder_intro_right">
 												<Typist onTypingDone={this.handleTypingDone} cursor={cursor}>
 												What<br/>
 												I<br/>

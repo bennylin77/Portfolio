@@ -41,9 +41,9 @@ class ListItem extends React.Component{
 	}
 
 	handleDelete(e){
-		const { project, onDeleteClick} = this.props;
+		const { article, onDeleteClick} = this.props;
 		e.preventDefault();
-		onDeleteClick(project.id);
+		onDeleteClick(article.id);
 	}
 
 

@@ -40,6 +40,7 @@ export class All extends React.Component {
   		<section>
         <Helmet>
             <title>Chi Lin_ Project</title>
+						<meta property="og:title" content="Chi Lin_ Project"/>
             <meta name="description" content="" />
         </Helmet>
         <Head/>

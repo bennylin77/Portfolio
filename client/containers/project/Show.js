@@ -26,6 +26,7 @@ class Show extends React.Component {
       <section>
         <Helmet>
           {projects[id].title && <title>Chi Lin_ {projects[id].title}</title>}
+					{projects[id].title && <meta property="og:title" content={"Chi Lin_ "+projects[id].title}/>}
           <meta name="description" content="" />
         </Helmet>
         <Head item={projects[id]}/>

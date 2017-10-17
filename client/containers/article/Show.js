@@ -29,7 +29,8 @@ class Show extends React.Component {
     return (
       <section>
         <Helmet>
-          {articles[id].title && <title>Chi Lin_ {articles[id].title}</title>}            
+          {articles[id].title && <title>Chi Lin_ {articles[id].title}</title>}
+					{articles[id].title && <meta property="og:title" content={"Chi Lin_ "+articles[id].title}/>}
           <meta name="description" content="" />
         </Helmet>
         <Head item={articles[id]}/>

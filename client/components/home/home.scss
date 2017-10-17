@@ -6,7 +6,7 @@
   height: 100vh;
 }
 .introduce_typist {
-  font-size: 21px;
+  font-size: 23px;
   color: #6d6d6d;
 }
 .Typist .Cursor {
@@ -31,7 +31,7 @@
 }
 @media (min-width: 768px) {
   .home_introduce_holder{
-    padding-top: 30vh;
+    padding-top: 26vh;
   }
   .introduce_typist {
     font-size: 40px;
@@ -106,19 +106,23 @@
 }
 
 .home_mid_holder_intro{
-	font-size: 28px;
+	font-size: 23px;
   color: #6d6d6d;
 	margin: 0 auto;
-	width: 60%;
+	width: 70%;
 	padding-top: 15vh;
 }
-.home_mid_holder_intro_prject{
+@media (min-width: 560px) {
+  .home_mid_holder_intro{
+		width: 60%;
+		font-size: 28px;
+  }
 }
-.home_mid_holder_left{
+
+.home_mid_holder_intro_left{
 	color: #ffffff;
 }
 .home_mid_holder_intro_right{
-
 }
 
 
