@@ -2,8 +2,8 @@ const path = require("path");
 const Server = require('./server/server.js')
 const port = (process.env.PORT || 8081)
 const app = Server.app();
-const https = require('https');
-const fs = require('fs');
+//const https = require('https');
+//const fs = require('fs');
 const reactHelmet = require("react-helmet");
 
 function wwwRedirect(req, res, next) {
@@ -19,15 +19,17 @@ function wwwRedirect(req, res, next) {
 app.set('trust proxy', true);
 app.use(wwwRedirect);
 
-//https
-const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/www.chi-lin.com/cert.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/www.chi-lin.com/privkey.pem'),
-		ca: fs.readFileSync('/etc/letsencrypt/live/www.chi-lin.com/chain.pem')
-};
 
-//webpack
 if (process.env.NODE_ENV !== 'production') {
+	//https
+	/*
+	const options = {
+	    cert: fs.readFileSync('/etc/letsencrypt/live/chi-lin.com/cert.pem'),
+	    key: fs.readFileSync('/etc/letsencrypt/live/chi-lin.com/privkey.pem'),
+			ca: fs.readFileSync('/etc/letsencrypt/live/chi-lin.com/chain.pem')
+	};
+	*/
+	//webpack
   const webpack = require('webpack')
   const webpackDevMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -80,4 +82,9 @@ app.get("/*", function (req, res) {
 //app.listen(port,function(){
 //    console.log("Started listening on port", port);
 //})
-https.createServer(options, app).listen(port);
+//if (process.env.NODE_ENV !== 'production')
+//	https.createServer(options, app).listen(port);
+//else
+app.listen(port,function(){
+	console.log("Started listening on port", port);
+})
