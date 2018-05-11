@@ -24,5 +24,4 @@ function editing(state = {}, action) {
 }
 
 const rootReducer = combineReducers({ selectedProjectTag, selectedArticleTag, entities, articlesByArticle, editing, projectListInProject, router: routerReducer });
-
 export default rootReducer;
