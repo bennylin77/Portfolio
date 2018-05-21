@@ -15,7 +15,7 @@ module.exports = merge({
     new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': JSON.stringify('development'),
-          'DOMAIN': JSON.stringify('https://www.chi-lin.com'),
+          'DOMAIN': JSON.stringify('https://chi-lin.com'),
           'PORT': JSON.stringify('8081')
       }
     })

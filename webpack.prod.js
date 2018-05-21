@@ -10,7 +10,7 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': JSON.stringify('production'),
-          'DOMAIN': JSON.stringify('https://www.chi-lin.com')
+          'DOMAIN': JSON.stringify('https://chi-lin.com')
       }
     })
   ]
